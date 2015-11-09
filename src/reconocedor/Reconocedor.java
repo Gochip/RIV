@@ -22,8 +22,6 @@ import static org.opencv.imgproc.Imgproc.warpAffine;
 import org.opencv.objdetect.CascadeClassifier;
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
-// Esta clase usa OPENCV para el reconocimiento de rostros.
-
 public class Reconocedor {
 
     private final CascadeClassifier clasificadorCara;
@@ -32,7 +30,7 @@ public class Reconocedor {
     public Reconocedor() {
         clasificadorCara = new CascadeClassifier("src/clasificadores/haarcascade_frontalface_alt2.xml");
         clasificadorOjos = new CascadeClassifier("src/clasificadores/haarcascade_eye.xml");
-       }
+    }
 
     //Retorna un vector de imagenes con caras reconocidas en una imagen Mat
     public Image[] reconocerCara(Mat imagen) {
@@ -43,7 +41,7 @@ public class Reconocedor {
         if (!imagen.empty()) {
 
             Mat aux = new Mat();
-            
+
             //Convierto la imagen a escala de grises
             Imgproc.cvtColor(imagen, aux, Imgproc.COLOR_BGR2GRAY);
             //Aplico la ecuacion de histograma a la imagen para estandaraziar el contraste y el brillo
@@ -59,20 +57,19 @@ public class Reconocedor {
             MatOfRect ojosDetectados = new MatOfRect();
             Mat caraGris;
 
+            Rect rectaSupCara;
             //Recorro las caras detectadas
             for (Rect rect : carasDetectadas.toArray()) {
                 //Obtengo las coordenadas de la parte superior de la cara deteactada
-                Rect recta  = new Rect(rect.x,rect.y, rect.width, (rect.height/2));
+                rectaSupCara = new Rect(rect.x, rect.y, rect.width, (rect.height / 2));
                 //Obtengo la imagen de la parte superior de la cara detectada
-                caraGris = aux.submat(recta);
-                
+                caraGris = aux.submat(rectaSupCara);
+
                 //Reconocozco los ojos
                 clasificadorOjos.detectMultiScale(caraGris, ojosDetectados, 1.3, 2,
-                    0 | CASCADE_SCALE_IMAGE, new Size(0, 0), 
-                    new Size(caraGris.width(), caraGris.height()));
-                //Vector con coordenadas de los ojos detectados
-                
-                
+                        0 | CASCADE_SCALE_IMAGE, new Size(0, 0),
+                        new Size(caraGris.width(), caraGris.height()));
+
                 //Descomentar para marcar los ojos con un cuadrado
 //                for(Rect rectO : ojosDetectados.toArray()){
 //                    rectangle(imagen.submat(rect), new Point(rectO.x, rectO.y),
@@ -89,7 +86,7 @@ public class Reconocedor {
 
         return caras.toArray(new Image[caras.size()]);
     }
-    
+
     //Convierte una imagen Mat(formato de opencv) a Image(formato de java)
     public Image convertir(Mat imagen) {
         MatOfByte matOfByte = new MatOfByte();
@@ -107,7 +104,7 @@ public class Reconocedor {
         }
         return (Image) bufImage;
     }
-    
+
     //Funciona que rota y estabiliza una imagen para su reconocimiento-NO PROBADA
     private Image estabilizarImagen(Mat cara, Rect ojoIzquierdo, Rect ojoDerecho) {
         Mat imagen;
