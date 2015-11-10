@@ -4,8 +4,14 @@ package capturador;
  * Esta clase hace la captura de datos a través de una cámara IP.
  * @author Parisi Germán
  */
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.io.IOException;
+import java.net.URL;
 import java.util.LinkedList;
+import javax.imageio.ImageIO;
 import static org.opencv.core.Core.subtract;
+import static org.opencv.core.CvType.CV_8UC3;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -20,7 +26,6 @@ import static org.opencv.imgproc.Imgproc.morphologyEx;
 import static org.opencv.imgproc.Imgproc.threshold;
 import org.opencv.videoio.VideoCapture;
 
-//Esta clase hace la captura de datos a través de una cámara IP.
 public class Capturador {
 	
     private int nroCamara;
@@ -29,19 +34,36 @@ public class Capturador {
     private Mat imagen;
 
     public Capturador() {
-        VideoCapture cap= new VideoCapture();
+        cap= new VideoCapture();
     }
 
     //Crea un capturador pasandole un string con la ip de la camara
     public Capturador(String ipCamara) {
         this.ipCamara = ipCamara;
-        cap = new VideoCapture(ipCamara);
     }
 
     //Crea un capturador pasandole un int con el numero de la camara
     public Capturador(int nroCamara) {
         this.nroCamara = nroCamara;
         cap = new VideoCapture(nroCamara);
+    }
+    
+    //Obtiene una imagen de la camara ip y la convierte en format0 MAT
+    public Mat obtenerImagenIpCamara() {
+        Mat m = null;
+        try {
+            //Lee la imagen de la direccion
+            BufferedImage img = ImageIO.read(new URL("http://" + ipCamara + "/photo.jpg"));
+           
+            byte[] pixeles = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+            m = new Mat(img.getHeight(), img.getWidth(), CV_8UC3);
+            m.put(0, 0, pixeles);
+            
+        } catch (IOException ex) {
+            System.out.println("Error de lectura " + ex);
+        }
+
+        return m;
     }
 
     //Obtiene una imagen de la camara asignada
@@ -61,8 +83,6 @@ public class Capturador {
                     if (hayMovimiento(imagen,imagenActual)) {
                         //Si hay se asigna la imagen actual como
                         imagen = imagenActual;
-                    } else {
-                        System.out.println("no hay movimiento");
                     }
                 } else {
                     //Si la imagen anterior es igual a null se asigna auotmaticamente 
@@ -117,5 +137,13 @@ public class Capturador {
 
     public void setIpCamara(String ipCamara){
         this.ipCamara = ipCamara;
+    }
+    
+     public Mat getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Mat imagen) {
+        this.imagen = imagen;
     }
 }
