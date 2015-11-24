@@ -10,6 +10,9 @@ import java.awt.Image;
 import java.util.LinkedList;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Rect;
+import org.opencv.imgcodecs.Imgcodecs;
 import reconocedor.Reconocedor;
 
 /**
@@ -19,6 +22,8 @@ import reconocedor.Reconocedor;
 public class Princpal {
 
     /**
+     * 1324799
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -30,28 +35,39 @@ public class Princpal {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         //Asigna la ip a reconocer
-        String ipCamara = "192.168.0.17:8080";
-        Capturador CAP = new Capturador(ipCamara);
+        Capturador CAP = new Capturador(0);
         Reconocedor REC = new Reconocedor();
 
+        //     Guardador GUA = new Guardador();
         //While true para estar constantemente capturando las imagenes
         while (true) {
 
             //Obtengo la imagen de la camara ip
-            Mat imagen = CAP.obtenerImagenIpCamara();
-            //Mat imagen = CAP.obtenerImagen();
+            Mat imagen = CAP.obtenerImagen();
 
+            MatOfRect carasDetectadas = REC.reconocerCara(imagen);
             //Asigno la imagen a un label convirtiendola primero en formato Image
+
             VENTANA.setImage(REC.convertir(imagen));
 
-            //Detecta las caras en la imagen
-            LinkedList<Image> carasDetectadas = REC.reconocerCara(imagen);
-            //Asigna la primera cara reconocida al otro label si es que encontro alguna
-            if (!carasDetectadas.isEmpty()) {
-                VENTANA.setImage2(carasDetectadas.getFirst());
+            LinkedList<Image> lista = new LinkedList<>();
+            for (Rect rect : carasDetectadas.toArray()) {
+                lista.add(REC.convertir(imagen.submat(rect)));
             }
-        }
+            VENTANA.agregarCarasPanel(lista);
+//            
+//            if (VENTANA.botonTocado) {
+//                //Detecta las caras en la imagen
+//                LinkedList<Image> imagenesCarasValidas = REC.reconocerCaraValida(imagen, carasDetectadas);
+//                
+//                System.out.println(imagenesCarasValidas.size());
+//                if (!imagenesCarasValidas.isEmpty()) {
+//                    VENTANA.agregarCarasPanel(imagenesCarasValidas);
+//                }
+//                VENTANA.botonTocado=false;
+//            }
 
+        }
     }
 
 }

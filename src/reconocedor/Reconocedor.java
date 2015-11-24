@@ -20,10 +20,11 @@ import static org.opencv.imgproc.Imgproc.getRotationMatrix2D;
 import static org.opencv.imgproc.Imgproc.rectangle;
 import static org.opencv.imgproc.Imgproc.warpAffine;
 import org.opencv.objdetect.CascadeClassifier;
+import static org.opencv.objdetect.Objdetect.CASCADE_DO_ROUGH_SEARCH;
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
 public class Reconocedor {
-    
+
     private final CascadeClassifier clasificadorCara;
     private final CascadeClassifier clasificadorOjos;
 
@@ -42,22 +43,64 @@ public class Reconocedor {
         this.caraAlto = 100;
         this.DESEADO_OJO_IZQUIERDO_X = 0.19;
         this.DESEADO_OJO_IZQUIERDO_Y = 0.14;
-        
+
         //Usados para detectar las coordenadas de los ojos
         this.EYE_SX = 0.16;
         this.EYE_SY = 0.26;
         this.EYE_SW = 0.30;
         this.EYE_SH = 0.28;
-        
+
         //Clasificadores para la cara y los ojos
         clasificadorCara = new CascadeClassifier("src/clasificadores/haarcascade_frontalface_alt2.xml");
         clasificadorOjos = new CascadeClassifier("src/clasificadores/haarcascade_eye.xml");
     }
 
     //Retorna un vector de imagenes con caras reconocidas en una imagen Mat
-    public LinkedList<Image> reconocerCara(Mat imagen) {
+    public LinkedList<Image> reconocerCaraValida(Mat imagen, MatOfRect carasDetectadas) {
         //Lista guardas las caras reconocidas correctamente
         LinkedList<Image> caras = new LinkedList<>();
+
+        //Pregunta si la matriz posee elementos
+        Mat aux = new Mat();
+
+        //Convierto la imagen a escala de grises
+        Imgproc.cvtColor(imagen, aux, Imgproc.COLOR_BGR2GRAY);
+        //Aplico la ecuacion de histograma a la imagen para estandaraziar el contraste y el brillo
+        Imgproc.equalizeHist(aux, aux);
+
+        //Recorro las caras detectadas
+        for (Rect rect : carasDetectadas.toArray()) {
+
+            //Cara detectada
+            Mat cara = imagen.submat(rect);
+            //Obtengo las coordenadas de los ojos detectados
+            Rect[] ojos = detectarOjos2(cara);
+
+            //Pregunto si se obtuvieron correctamenta 2 ojos
+            if (ojos != null) {
+                //Cara detectada a color
+                Mat img = aux.submat(rect);
+
+                //Descomentar para marcar los ojos con un cuadrado
+                for (Rect rectO : ojos) {
+                    rectangle(img, new Point(rectO.x, rectO.y),
+                            new Point(rectO.x + rectO.width, rectO.y + rectO.height),
+                            new Scalar(0, 255, 0));
+                }
+
+                //Estabilizo la imagen
+                //img = estabilizarImagen(img, ojos[1], ojos[0]);
+                caras.add(convertir(img));
+            }
+        }
+
+        return caras;
+    }
+
+    //Retorna un vector de imagenes con caras reconocidas en una imagen Mat
+    public MatOfRect reconocerCara(Mat imagen) {
+        //Estructura que guarda las caras detectadas
+        MatOfRect carasDetectadas = new MatOfRect();
 
         //Pregunta si la matriz posee elementos
         if (!imagen.empty()) {
@@ -69,8 +112,6 @@ public class Reconocedor {
             //Aplico la ecuacion de histograma a la imagen para estandaraziar el contraste y el brillo
             Imgproc.equalizeHist(aux, aux);
 
-            //Estructura que guarda las caras detectadas
-            MatOfRect carasDetectadas = new MatOfRect();
             //Detecta las caras 
             clasificadorCara.detectMultiScale(aux, carasDetectadas, 1.3, 2,
                     0 | CASCADE_SCALE_IMAGE, new Size(30, 30), new Size(aux.width(), aux.height()));
@@ -78,34 +119,17 @@ public class Reconocedor {
             //Recorro las caras detectadas
             for (Rect rect : carasDetectadas.toArray()) {
 
-                //Cara detectada
-                Mat cara = aux.submat(rect);
-                //Obtengo las coordenadas de los ojos detectados
-                Rect[] ojos = detectarOjos2(cara);
-
-                //Pregunto si se obtuvieron correctamenta 2 ojos
-                if (ojos != null) {
-                    //Cara detectada a color
-                    Mat img = imagen.submat(rect);
-
-                    //Descomentar para marcar los ojos con un cuadrado
-//                    for(Rect rectO : ojos){
-//                        rectangle(img, new Point(rectO.x, rectO.y),
-//                            new Point(rectO.x + rectO.width, rectO.y + rectO.height),
-//                            new Scalar(0, 255, 0));
-//                    }
-//                    
-                    //Estabilizo la imagen
-                    //img = estabilizarImagen(img, ojos[0], ojos[1]);
-                    caras.add(convertir(img));
-                }
+                //Descomentar para marcar los ojos con un cuadrado
+                rectangle(imagen, new Point(rect.x, rect.y),
+                        new Point(rect.x + rect.width, rect.y + rect.height),
+                        new Scalar(0, 255, 0));
             }
         }
-        return caras;
+        return carasDetectadas;
     }
 
     //Retorna un vector con las coordenadas de los ojos si los encuentra si no retorna null
-    public Rect[] detectarOjos(Mat cara){
+    public Rect[] detectarOjos(Mat cara) {
 
         //Obtiene las regiones donde detectar el ojo
         int izquierdaX = round(cara.cols() * EYE_SX);
@@ -122,12 +146,12 @@ public class Reconocedor {
         MatOfRect ojoDerecho = new MatOfRect();
 
         //Detecto los ojos en cada region
-        clasificadorOjos.detectMultiScale(arribaIzquierdaCara, ojoIzquierdo);
-//                1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
-        //              new Size(arribaIzquierdaCara.width(), arribaDerechaCara.height()));
-        clasificadorOjos.detectMultiScale(arribaDerechaCara, ojoDerecho);
-               // 1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
-        // new Size(arribaIzquierdaCara.width(), arribaDerechaCara.height()));
+        clasificadorOjos.detectMultiScale(arribaIzquierdaCara, ojoIzquierdo,
+                1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
+                new Size(arribaIzquierdaCara.width(), arribaDerechaCara.height()));
+        clasificadorOjos.detectMultiScale(arribaDerechaCara, ojoDerecho,
+                1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
+                new Size(arribaIzquierdaCara.width(), arribaDerechaCara.height()));
 
         Rect[] ojos = null;
         //Pregunto si detecto correctamente los ojos
@@ -151,7 +175,6 @@ public class Reconocedor {
 
         return ojos;
     }
-
 
     //Devuelve un vector si encontro los ojos si no devuelve null
     public Rect[] detectarOjos2(Mat cara) {

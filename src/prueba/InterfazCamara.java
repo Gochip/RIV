@@ -6,7 +6,11 @@
 package prueba;
 
 import java.awt.Image;
+import java.awt.Panel;
+import java.util.LinkedList;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -14,27 +18,30 @@ import javax.swing.ImageIcon;
  */
 public class InterfazCamara extends javax.swing.JFrame {
 
+    public boolean botonTocado = false;
+
     /**
      * Creates new form Form
      */
     public InterfazCamara() {
         initComponents();
-         
-        
+
     }
-    public void setImage(Image imagen){
-        
-        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(this.jLabel1.getWidth(), this.jLabel1.getHeight(), Image.SCALE_SMOOTH));
-        this.jLabel1.setIcon(icon);
 
-        };
+    public void setImage(Image imagen) {
+        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(this.lblImagen.getWidth(), this.lblImagen.getHeight(), Image.SCALE_SMOOTH));
+        this.lblImagen.setIcon(icon);
+    }
 
-    public void setImage2(Image imagen){
-        
-        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(this.jLabel2.getWidth(), this.jLabel2.getHeight(), Image.SCALE_SMOOTH));
-        this.jLabel2.setIcon(icon);
+    ;
 
-        };
+    
+    public void agregarImagenLabel(Image imagen, JLabel label) {
+        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH));
+        label.setIcon(icon);
+    }
+
+    ;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,31 +51,62 @@ public class InterfazCamara extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblImagen = new javax.swing.JLabel();
+        panelCaras = new javax.swing.JPanel();
+        btnCarasValidas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 300));
-        setSize(new java.awt.Dimension(800, 300));
+        setSize(new java.awt.Dimension(1024, 800));
+
+        javax.swing.GroupLayout panelCarasLayout = new javax.swing.GroupLayout(panelCaras);
+        panelCaras.setLayout(panelCarasLayout);
+        panelCarasLayout.setHorizontalGroup(
+            panelCarasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 472, Short.MAX_VALUE)
+        );
+        panelCarasLayout.setVerticalGroup(
+            panelCarasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 627, Short.MAX_VALUE)
+        );
+
+        btnCarasValidas.setText("Reconocer Caras Validas");
+        btnCarasValidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCarasValidasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelCaras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnCarasValidas, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(panelCaras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnCarasValidas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCarasValidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarasValidasActionPerformed
+        botonTocado = true;
+    }//GEN-LAST:event_btnCarasValidasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,8 +144,36 @@ public class InterfazCamara extends javax.swing.JFrame {
         });
     }
 
+    public void agregarCarasPanel(LinkedList<Image> imagenesCarasValidas) {
+        //Remueve los componentes del panel
+        panelCaras.removeAll();
+        panelCaras.repaint();
+        
+        JLabel[] labels = new JLabel[imagenesCarasValidas.size()];
+        //Recorre las caras detectadas        
+        for (int i = 0; i < imagenesCarasValidas.size(); i++) {
+            //Obtengo la imagen de la cara
+            Image imagen = imagenesCarasValidas.get(i);
+            
+            //Creo el nuevo label
+            JLabel label = new JLabel();
+            //Se hace visible
+            label.setVisible(true);
+            //Lo redimensiono
+            label.setSize(100, 100);
+            //Lo agrego al panel 
+            panelCaras.add(label);
+            panelCaras.validate();
+            //Le agrego la imagen al label
+            agregarImagenLabel(imagen, label);
+            //Lo alinio mas abajo
+            label.setAlignmentY(10*i);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnCarasValidas;
+    private javax.swing.JLabel lblImagen;
+    private javax.swing.JPanel panelCaras;
     // End of variables declaration//GEN-END:variables
 }

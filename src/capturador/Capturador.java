@@ -2,6 +2,7 @@ package capturador;
 
 /**
  * Esta clase hace la captura de datos a través de una cámara IP.
+ *
  * @author Parisi Germán
  */
 import java.awt.image.BufferedImage;
@@ -27,14 +28,14 @@ import static org.opencv.imgproc.Imgproc.threshold;
 import org.opencv.videoio.VideoCapture;
 
 public class Capturador {
-	
+
     private int nroCamara;
     private String ipCamara;
     private VideoCapture cap;
     private Mat imagen;
-
+    
     public Capturador() {
-        cap= new VideoCapture();
+        cap = new VideoCapture();
     }
 
     //Crea un capturador pasandole un string con la ip de la camara
@@ -47,6 +48,7 @@ public class Capturador {
         this.nroCamara = nroCamara;
         cap = new VideoCapture(nroCamara);
     }
+
     
     //Obtiene una imagen de la camara ip y la convierte en format0 MAT
     public Mat obtenerImagenIpCamara() {
@@ -54,11 +56,10 @@ public class Capturador {
         try {
             //Lee la imagen de la direccion
             BufferedImage img = ImageIO.read(new URL("http://" + ipCamara + "/photo.jpg"));
-           
+
             byte[] pixeles = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
             m = new Mat(img.getHeight(), img.getWidth(), CV_8UC3);
             m.put(0, 0, pixeles);
-            
         } catch (IOException ex) {
             System.out.println("Error de lectura " + ex);
         }
@@ -80,7 +81,7 @@ public class Capturador {
                 //Pregunto si la imagen anterior es nula
                 if (imagen != null) {
                     //Preguno si hay movimiento
-                    if (hayMovimiento(imagen,imagenActual)) {
+                    if (hayMovimiento(imagen, imagenActual)) {
                         //Si hay se asigna la imagen actual como
                         imagen = imagenActual;
                     }
@@ -130,20 +131,22 @@ public class Capturador {
         }
         return movimiento;
     }
-    
-    public void setNroCamara(int nroCamara){
+
+    public void setNroCamara(int nroCamara) {
         this.nroCamara = nroCamara;
     }
 
-    public void setIpCamara(String ipCamara){
+    public void setIpCamara(String ipCamara) {
         this.ipCamara = ipCamara;
     }
-    
-     public Mat getImagen() {
+
+    public Mat getImagen() {
         return imagen;
     }
 
     public void setImagen(Mat imagen) {
         this.imagen = imagen;
     }
+
+    
 }
