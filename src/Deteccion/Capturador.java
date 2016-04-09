@@ -4,7 +4,7 @@ package Deteccion;
  * Esta clase hace la captura de datos a través de una cámara IP o una camara
  * consectada al PC.
  *
- */
+// */
 import org.bytedeco.javacpp.opencv_core.Mat;
 import org.bytedeco.javacpp.opencv_core.MatVector;
 import org.bytedeco.javacpp.opencv_core.Point;
