@@ -106,7 +106,7 @@ public class ReconocedorCara {
         Cara C;
         for (int i = 0; i < vectorCaras.size(); i++) {
             //Obtengo una cara clasificada
-            cara = new Mat(imagen, vectorCaras.get(i));
+             cara = new Mat(imagen, vectorCaras.get(i));
             //Intento detectar los ojos
             C = this.detectarOjos(cara);
             if (C != null) {
