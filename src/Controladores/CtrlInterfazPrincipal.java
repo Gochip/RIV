@@ -11,7 +11,7 @@ import Deteccion.ReconocedorCara;
 import Interfaces.InterfazPrincipal;
 import java.util.ArrayList;
 import org.bytedeco.javacpp.opencv_core.Mat;
-
+import Controladores.CtrlInterfazHistorial;
 /**
  *
  * @author gastr
@@ -21,7 +21,8 @@ public class CtrlInterfazPrincipal {
     private InterfazPrincipal interfazPrincipal;
     private Capturador capturador;
     private ReconocedorCara reconocedorCara;
-
+    private CtrlInterfazHistorial ctrlInterfazHistorial;
+    
     public void setInterfaz(InterfazPrincipal interfazPrincipal) {
         this.interfazPrincipal = interfazPrincipal;
     }
@@ -46,6 +47,14 @@ public class CtrlInterfazPrincipal {
         } else {
             //this.interfazPrincipal.setLabelValidacion("No se pudo establecer conexion con la camara");
         }
+    }
+
+    public void abrirInterfazHistorial() {
+    this.ctrlInterfazHistorial.abrirInterfazHistorial();    
+    }
+
+    public void setCtrlInterfazHistorial(CtrlInterfazHistorial ctrlInterfazHistorial) {
+    this.ctrlInterfazHistorial=ctrlInterfazHistorial;
     }
 
 }

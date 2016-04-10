@@ -6,6 +6,8 @@
 package Interfaces;
 
 import Controladores.CtrlInterfazPrincipal;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -19,6 +21,19 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private CtrlInterfazPrincipal ctrlInterfazPrincipal;
     public InterfazPrincipal() {
         initComponents();
+
+        Calendar cl = Calendar.getInstance();
+        
+        Calendar fecha = new GregorianCalendar();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH)+1;
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+        this.lblFecha.setText(dia+"/"+mes+"/"+año);
+        int hora= fecha.get(Calendar.HOUR_OF_DAY);
+        int minutos=fecha.get(Calendar.MINUTE);
+        int segundos = fecha.get(Calendar.SECOND); 
+        this.lblHora.setText(""+hora+":"+minutos+":"+segundos);
+       
     }
 
     /**
@@ -54,7 +69,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Informacion", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true), "Informacion", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 11), new java.awt.Color(255, 255, 255))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("                    ULTIMA VISITA");
@@ -80,7 +95,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                 .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtLegajo, javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,17 +132,15 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                         .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(lblInfoFechaYHora)))
         );
 
-        lvlVideoCamara.setText("Video camara");
+        lvlVideoCamara.setText("                                                         Video no disponible");
 
         jLabel6.setText("Fecha:");
-
-        lblFecha.setText("--/--/----");
 
         jLabel8.setText("Hora:");
 
@@ -138,10 +151,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lvlVideoCamara, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addComponent(lvlVideoCamara, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel6)
@@ -167,12 +180,17 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                     .addComponent(lblFecha)
                     .addComponent(jLabel8)
                     .addComponent(lblHora))
-                .addGap(0, 74, Short.MAX_VALUE))
+                .addGap(0, 85, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Ver");
 
         jMenuItem1.setText("Historial");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -188,7 +206,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 2, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,6 +217,11 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        this.ctrlInterfazPrincipal.abrirInterfazHistorial();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
