@@ -1,28 +1,28 @@
 package Deteccion;
 
+import java.util.LinkedList;
+import static org.opencv.core.Core.subtract;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import static org.opencv.imgproc.Imgproc.MORPH_OPEN;
+import static org.opencv.imgproc.Imgproc.MORPH_RECT;
+import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
+import static org.opencv.imgproc.Imgproc.contourArea;
+import static org.opencv.imgproc.Imgproc.cvtColor;
+import static org.opencv.imgproc.Imgproc.findContours;
+import static org.opencv.imgproc.Imgproc.getStructuringElement;
+import static org.opencv.imgproc.Imgproc.morphologyEx;
+import static org.opencv.imgproc.Imgproc.threshold;
+import org.opencv.videoio.VideoCapture;
+
 /**
  * Esta clase hace la captura de datos a través de una cámara IP o una camara
  * consectada al PC.
  *
 // */
-import org.bytedeco.javacpp.opencv_core.Mat;
-import org.bytedeco.javacpp.opencv_core.MatVector;
-import org.bytedeco.javacpp.opencv_core.Point;
-import org.bytedeco.javacpp.opencv_core.Size;
-import static org.bytedeco.javacpp.opencv_core.subtract;
-import org.bytedeco.javacpp.opencv_highgui;
-import org.bytedeco.javacpp.opencv_imgproc;
-import static org.bytedeco.javacpp.opencv_imgproc.CHAIN_APPROX_SIMPLE;
-import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
-import static org.bytedeco.javacpp.opencv_imgproc.CV_MOP_OPEN;
-import static org.bytedeco.javacpp.opencv_imgproc.CV_THRESH_BINARY;
-import static org.bytedeco.javacpp.opencv_imgproc.MORPH_RECT;
-import static org.bytedeco.javacpp.opencv_imgproc.RETR_CCOMP;
-import static org.bytedeco.javacpp.opencv_imgproc.boundingRect;
-import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
-import static org.bytedeco.javacpp.opencv_imgproc.getStructuringElement;
-import static org.bytedeco.javacpp.opencv_imgproc.threshold;
-import org.bytedeco.javacpp.opencv_videoio.VideoCapture;
 
 public class Capturador {
 
@@ -85,7 +85,7 @@ public class Capturador {
         Devuelve verdadero si detecto movimiento en la imagenActual con respecto a la imagenAnterior
      */
     public Mat getMovimiento(Mat imagenAnterior, Mat imagenActual) {
-        Mat retorno = null;
+        Mat retorno;
         if (!imagenAnterior.empty()) {
             Mat _kernel = getStructuringElement(MORPH_RECT, new Size(3, 3),
                     new Point(1, 1));
@@ -95,24 +95,25 @@ public class Capturador {
             //Se restan las imagenes
             subtract(imagenActual, imagenAnterior, imagenMovimiento);
             //Reduce el ruido de fondo
-            threshold(imagenMovimiento, imagenMovimiento, 15, 255, CV_MOP_OPEN);
-            opencv_imgproc.morphologyEx(imagenMovimiento, imagenMovimiento, CV_THRESH_BINARY, _kernel);
+            threshold(imagenMovimiento, imagenMovimiento, 15, 255, THRESH_BINARY);
+            morphologyEx(imagenMovimiento, imagenMovimiento, MORPH_OPEN, _kernel, 
+                    new Point(-1, -1), 1);
             //Se convierte la imagen a escala de grises
-            cvtColor(imagenMovimiento, imagenMovimiento, CV_BGR2GRAY);
+            cvtColor(imagenMovimiento, imagenMovimiento, Imgproc.COLOR_BGR2GRAY);
 
             //Lista que guarda los puntos de los contornos
-            MatVector contornos = new MatVector();
+            LinkedList<MatOfPoint> contornos = new LinkedList<>();
             Mat jerarquia = new Mat();
-
+             
             //Detecta los contornos
-            opencv_imgproc.findContours(imagenMovimiento, contornos,
-                    jerarquia, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
+            findContours(imagenMovimiento, contornos,
+                jerarquia, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 
             double a;
             double areaMayor = 0;
             int pos = 0;
             for (int i = 0; i < contornos.size(); i++) {
-                a = opencv_imgproc.contourArea(contornos.get(i), false);
+                a = contourArea(contornos.get(i), false);
                 if (a > areaMayor) {
                     areaMayor = a;
                     pos = i;

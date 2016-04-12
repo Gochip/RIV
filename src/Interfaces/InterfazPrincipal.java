@@ -6,6 +6,9 @@
 package Interfaces;
 
 import Controladores.CtrlInterfazPrincipal;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -35,13 +38,13 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblFoto = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnHistorial = new javax.swing.JButton();
         txtApellidoYNombre = new javax.swing.JTextField();
         txtLegajo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         lblInfoFechaYHora = new javax.swing.JLabel();
-        lvlVideoCamara = new javax.swing.JLabel();
+        lblVideoCamara = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
@@ -63,7 +66,12 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         jLabel3.setText("           Apellido y nombre");
 
-        jButton1.setText("Ver Historial");
+        btnHistorial.setText("Ver Historial");
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("                    Legajo");
 
@@ -95,7 +103,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblInfoFechaYHora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnHistorial)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -116,14 +124,14 @@ public class InterfazPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblFoto, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(btnHistorial)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(lblInfoFechaYHora)))
         );
 
-        lvlVideoCamara.setText("Video camara");
+        lblVideoCamara.setText("Video camara");
 
         jLabel6.setText("Fecha:");
 
@@ -140,7 +148,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lvlVideoCamara, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE))
+                    .addComponent(lblVideoCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -157,7 +165,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lvlVideoCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblVideoCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -200,6 +208,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+       
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -237,7 +249,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnHistorial;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
@@ -255,12 +267,26 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblInfoFechaYHora;
-    private javax.swing.JLabel lvlVideoCamara;
+    private javax.swing.JLabel lblVideoCamara;
     private javax.swing.JTextField txtApellidoYNombre;
     private javax.swing.JTextField txtLegajo;
     // End of variables declaration//GEN-END:variables
 
     public void setControlador(CtrlInterfazPrincipal ctrlInterfazPrincipal) {
     this.ctrlInterfazPrincipal = ctrlInterfazPrincipal;
+    }
+
+    public void setLblImagenCamara(Image imagen) {
+        this.agregarImagenLabel(imagen, this.lblVideoCamara);
+    }
+    
+     public void agregarImagenLabel(Image imagen, JLabel label) {
+         ImageIcon icon = new ImageIcon(imagen.getScaledInstance(label.getWidth(), label.getHeight(),
+                 Image.SCALE_SMOOTH));
+         label.setIcon(icon);
+     }
+
+    public void setLblImagenEncontrada(Image imagen) {
+        this.agregarImagenLabel(imagen, this.lblFoto);
     }
 }

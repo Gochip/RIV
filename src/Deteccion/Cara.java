@@ -3,8 +3,8 @@
  */
 package Deteccion;
 
-import org.bytedeco.javacpp.opencv_core.Mat;
-import org.bytedeco.javacpp.opencv_core.Rect;
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 
 /**
  *

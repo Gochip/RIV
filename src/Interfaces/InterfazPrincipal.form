@@ -71,7 +71,7 @@
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="lvlVideoCamara" pref="516" max="32767" attributes="0"/>
+                      <Component id="lblVideoCamara" min="-2" pref="516" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
@@ -92,7 +92,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="lvlVideoCamara" min="-2" pref="422" max="-2" attributes="0"/>
+                      <Component id="lblVideoCamara" min="-2" pref="422" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -152,7 +152,7 @@
                               <Component id="lblInfoFechaYHora" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnHistorial" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -178,7 +178,7 @@
                           <Group type="102" attributes="0">
                               <Component id="lblFoto" min="-2" pref="109" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnHistorial" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="16" max="32767" attributes="0"/>
@@ -209,10 +209,13 @@
                 <Property name="text" type="java.lang.String" value="           Apellido y nombre"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="btnHistorial">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ver Historial"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHistorialActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtApellidoYNombre">
             </Component>
@@ -235,7 +238,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="lvlVideoCamara">
+        <Component class="javax.swing.JLabel" name="lblVideoCamara">
           <Properties>
             <Property name="text" type="java.lang.String" value="Video camara"/>
           </Properties>

@@ -4,42 +4,28 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import static java.lang.Math.atan2;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.indexer.DoubleIndexer;
-import static org.bytedeco.javacpp.opencv_core.CV_64FC3;
-import static org.bytedeco.javacpp.opencv_core.CV_8U;
-import static org.bytedeco.javacpp.opencv_core.CV_PI;
-import org.bytedeco.javacpp.opencv_core.CvMat;
-import org.bytedeco.javacpp.opencv_core.CvType;
-import org.bytedeco.javacpp.opencv_core.Mat;
-import org.bytedeco.javacpp.opencv_core.Point;
-import org.bytedeco.javacpp.opencv_core.Point2f;
-import org.bytedeco.javacpp.opencv_core.Rect;
-import org.bytedeco.javacpp.opencv_core.RectVector;
-import org.bytedeco.javacpp.opencv_core.Scalar;
-import org.bytedeco.javacpp.opencv_core.Size;
-import static org.bytedeco.javacpp.opencv_core.cvRound;
-import static org.bytedeco.javacpp.opencv_core.cvSet2D;
-import static org.bytedeco.javacpp.opencv_highgui.imshow;
-import org.bytedeco.javacpp.opencv_imgcodecs;
-import static org.bytedeco.javacpp.opencv_imgcodecs.imencode;
-import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
-import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
-import static org.bytedeco.javacpp.opencv_imgproc.cvtColor;
-import static org.bytedeco.javacpp.opencv_imgproc.equalizeHist;
-import static org.bytedeco.javacpp.opencv_imgproc.getRotationMatrix2D;
-import static org.bytedeco.javacpp.opencv_imgproc.resize;
-import static org.bytedeco.javacpp.opencv_imgproc.warpAffine;
-import static org.bytedeco.javacpp.opencv_objdetect.CASCADE_DO_ROUGH_SEARCH;
-import static org.bytedeco.javacpp.opencv_objdetect.CASCADE_FIND_BIGGEST_OBJECT;
-import org.bytedeco.javacpp.opencv_objdetect.CascadeClassifier;
-import org.bytedeco.javacv.FrameConverter;
+import static org.opencv.core.CvType.CV_8U;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import static org.opencv.imgcodecs.Imgcodecs.imwrite;
+import org.opencv.imgproc.Imgproc;
+import static org.opencv.imgproc.Imgproc.cvtColor;
+import static org.opencv.imgproc.Imgproc.equalizeHist;
+import static org.opencv.imgproc.Imgproc.getRotationMatrix2D;
+import static org.opencv.imgproc.Imgproc.rectangle;
+import static org.opencv.imgproc.Imgproc.resize;
+import static org.opencv.imgproc.Imgproc.warpAffine;
+import org.opencv.objdetect.CascadeClassifier;
+import static org.opencv.objdetect.Objdetect.CASCADE_DO_ROUGH_SEARCH;
+import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
 public class ReconocedorCara {
 
@@ -69,22 +55,38 @@ public class ReconocedorCara {
         this.DESEADO_OJO_IZQUIERDO_Y = 0.14;
 
         //Usados para detectar las coordenadas de los ojos
-        this.EYE_SX = 0.12;
-        this.EYE_SY = 0.17;
-        this.EYE_SW = 0.37;
-        this.EYE_SH = 0.36;
+        //haarcascade_eye_tree_eyeglasses.xml
+//        this.EYE_SX = 0.12;
+//        this.EYE_SY = 0.17;
+//        this.EYE_SW = 0.37;
+//        this.EYE_SH = 0.36;
+        //haarcascade_eye.xml
+        this.EYE_SX = 0.16;
+        this.EYE_SY = 0.26;
+        this.EYE_SW = 0.30;
+        this.EYE_SH = 0.28;
 
+        //haarcascade_mcs_lefteye.xml
+//        this.EYE_SX = 0.10;
+//        this.EYE_SY = 0.19;
+//        this.EYE_SW = 0.40;
+//        this.EYE_SH = 0.36;
+        //haarcascade_lefteye_2splits.xml
+//        this.EYE_SX = 0.12;
+//        this.EYE_SY = 0.17;
+//        this.EYE_SW = 0.37;
+//        this.EYE_SH = 0.36;
         //Clasificadores para la cara y los ojos
-        clasificadorCara = new CascadeClassifier("src/clasificadores/haarcascade_frontalface_alt_tree.xml");
-        clasificadorOjoIzquierdo = new CascadeClassifier("src/clasificadores/haarcascade_eye_tree_eyeglasses.xml");
-        clasificadorOjoDerecho = new CascadeClassifier("src/clasificadores/haarcascade_eye_tree_eyeglasses.xml");
+        clasificadorCara = new CascadeClassifier("src/clasificadores/haarcascade_frontalface_alt2.xml");
+        clasificadorOjoIzquierdo = new CascadeClassifier("src/clasificadores/haarcascade_eye.xml");
+        clasificadorOjoDerecho = new CascadeClassifier("src/clasificadores/haarcascade_eye.xml");
 
         //Tamaño a reducir la imagen para normalizar
         reducirTamaño = 480;
 
         //Se asigna los tamaños minimos a detectar de cara
         minDeteccionCara = new Size(30, 30);
-        maxDeteccionCara = new Size(300, 300);
+        maxDeteccionCara = new Size(480, 480);
     }
 
     /*
@@ -94,25 +96,28 @@ public class ReconocedorCara {
      */
     public ArrayList<Cara> detectarCaras(Mat imagen) {
         ArrayList<Cara> carasValidas = new ArrayList<>();
-        RectVector vectorCaras = new RectVector();
+        MatOfRect vectorCaras = new MatOfRect();
 
         Mat imagenNormalizada = this.normalizarImagen(imagen);
         //Se detectan las caras en la imagen y se guarda en un vecot de rectas con las posiciones
-        clasificadorCara.detectMultiScale(imagenNormalizada, vectorCaras, 1.1, 3,
-                CASCADE_FIND_BIGGEST_OBJECT | CASCADE_DO_ROUGH_SEARCH, minDeteccionCara, maxDeteccionCara);
+        clasificadorCara.detectMultiScale(imagenNormalizada, vectorCaras, 1.2, 3,
+                0, minDeteccionCara, maxDeteccionCara);
 
         //Recorro todas las posibles caras detectadas
         Mat cara;
         Cara C;
-        for (int i = 0; i < vectorCaras.size(); i++) {
+        for (Rect rect : vectorCaras.toArray()) {
             //Obtengo una cara clasificada
-             cara = new Mat(imagen, vectorCaras.get(i));
+            cara = new Mat(imagenNormalizada, rect);
+            rectangle(imagen, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+                    new Scalar(0, 255, 255));
+
             //Intento detectar los ojos
             C = this.detectarOjos(cara);
             if (C != null) {
                 //Si se detectaron se agregan al ArrayList
                 //Pero antes se estabiliza la imagen
-                C.setImagen(this.getImagenEstabilizada(C.getImagen(), 
+                C.setImagen(this.getImagenEstabilizada(C.getImagen(),
                         C.getOjoIzquierdo(), C.getOjoDerecho()));
                 carasValidas.add(C);
             }
@@ -126,43 +131,44 @@ public class ReconocedorCara {
     private Cara detectarOjos(Mat cara) {
         Cara C = null;
         //Obtiene las regiones donde detectar el ojo
-        int izquierdaX = cvRound(cara.cols() * EYE_SX);
-        int arribaY = cvRound(cara.rows() * EYE_SY);
-        int anchoX = cvRound(cara.cols() * EYE_SW);
-        int altoY = cvRound(cara.rows() * EYE_SH);
-        int derechaX = cvRound(cara.cols() * (1.0 - EYE_SX - EYE_SW));
+        int izquierdaX = round(cara.cols() * EYE_SX);
+        int arribaY = round(cara.rows() * EYE_SY);
+        int anchoX = round(cara.cols() * EYE_SW);
+        int altoY = round(cara.rows() * EYE_SH);
+        int derechaX = round(cara.cols() * (1.0 - EYE_SX - EYE_SW));
 
         //Obtengo las imagenes de las partes de la cara donde se ecnuentran los ojos
         Mat arribaIzquierdaCara = new Mat(cara, new Rect(izquierdaX, arribaY, anchoX, altoY));
         Mat arribaDerechaCara = new Mat(cara, new Rect(derechaX, arribaY, anchoX, altoY));
 
-        RectVector vectorOjoIzquierdo = new RectVector();
-        RectVector vectorOjoDerecho = new RectVector();
+        rectangle(cara, new Point(izquierdaX, arribaY), new Point(anchoX + izquierdaX, arribaY + altoY),
+                new Scalar(0, 255, 255));
+        rectangle(cara, new Point(derechaX, arribaY), new Point(anchoX + derechaX, arribaY + altoY),
+                new Scalar(0, 255, 255));
+
+        MatOfRect vectorOjoIzquierdo = new MatOfRect();
+        MatOfRect vectorOjoDerecho = new MatOfRect();
 
         //Detecto los ojos en cada region
-        clasificadorOjoIzquierdo.detectMultiScale(arribaIzquierdaCara, vectorOjoIzquierdo,
-                1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
-                new Size(anchoX, altoY));
-        clasificadorOjoDerecho.detectMultiScale(arribaDerechaCara, vectorOjoDerecho,
-                1.1, 3, CASCADE_DO_ROUGH_SEARCH, new Size(0, 0),
-                new Size(anchoX, altoY));
+        clasificadorOjoIzquierdo.detectMultiScale(arribaIzquierdaCara, vectorOjoIzquierdo);
+        clasificadorOjoDerecho.detectMultiScale(arribaDerechaCara, vectorOjoDerecho);
 
         //Pregunto si detecto correctamente los ojos
-        if (vectorOjoDerecho.size() == 1 && vectorOjoIzquierdo.size() == 1) {
+        if (vectorOjoDerecho.toArray().length == 1 && vectorOjoIzquierdo.toArray().length == 1) {
 
             //Obtengo las coordenadas de los ojos
-            Rect ojoDCoor = vectorOjoDerecho.get(0);
-            Rect ojoICoor = vectorOjoIzquierdo.get(0);
+            Rect ojoDCoor = vectorOjoDerecho.toArray()[0];
+            Rect ojoICoor = vectorOjoIzquierdo.toArray()[0];
 
             //Modifico las coordenadas conrespecto a la cara
-            ojoDCoor.x(ojoDCoor.x() + izquierdaX);
-            ojoDCoor.y(ojoDCoor.y() + arribaY);
+            ojoDCoor.x += izquierdaX;
+            ojoDCoor.y += arribaY;
 
-            ojoICoor.x(ojoICoor.x() + derechaX);
-            ojoICoor.y(ojoICoor.y() + arribaY);
+            ojoICoor.x += derechaX;
+            ojoICoor.y += arribaY;
+
             C = new Cara(cara, ojoDCoor, ojoICoor);
         }
-
         return C;
     }
 
@@ -176,12 +182,12 @@ public class ReconocedorCara {
         //Pregunta si la imagen es mayor al tamaño minimo
         if (imagen.cols() > this.reducirTamaño) {
             //Escala la imagen
-            int escalarAlto = cvRound(imagen.rows() / escala);
+            int escalarAlto = round(imagen.rows() / escala);
             resize(imagen, imagenNormalizada, new Size(this.reducirTamaño, escalarAlto));
         }
 
         //Convierto la imagen a escala de grises
-        cvtColor(imagenNormalizada, imagenNormalizada, CV_BGR2GRAY);
+        cvtColor(imagenNormalizada, imagenNormalizada, Imgproc.COLOR_BGR2GRAY);
         //Aplico la ecuacion de histograma a la imagen para estandaraziar el contraste y el brillo
         equalizeHist(imagenNormalizada, imagenNormalizada);
 
@@ -191,21 +197,18 @@ public class ReconocedorCara {
     /*
     * Funcion que rota y estabiliza una imagen
      */
-    private Mat getImagenEstabilizada(Mat cara, Rect ojoIzquierdo, Rect ojoDerecho) {
+    private Mat getImagenEstabilizada(Mat cara, Rect ojoDerecho, Rect ojoIzquierdo) {
         Mat imagen;
 
-        Point izquierda = new Point(ojoIzquierdo.x() + ojoIzquierdo.width() / 2,
-                ojoIzquierdo.y() + ojoIzquierdo.height() / 2);
-        Point derecha = new Point(ojoDerecho.x() + ojoDerecho.width() / 2,
-                ojoDerecho.y() + ojoDerecho.height() / 2);
-        Point2f centroOjos = new Point2f((izquierda.x() + derecha.x()) * 0.5f,
-                (izquierda.y() + derecha.y()) * 0.5f);
+        Point izquierda = new Point(ojoIzquierdo.x + ojoIzquierdo.width / 2, ojoIzquierdo.y + ojoIzquierdo.height / 2);
+        Point derecha = new Point(ojoDerecho.x + ojoDerecho.width / 2, ojoDerecho.y + ojoDerecho.height / 2);
+        Point centroOjos = new Point((izquierda.x + derecha.x) * 0.5, (izquierda.y + derecha.y) * 0.5);
 
         // Obtiene el angulo entre los dos ojos
-        double dy = (derecha.y() - izquierda.y());
-        double dx = (derecha.x() - izquierda.x());
-        double largo = sqrt(pow(dx,2) + pow(dy,2));
-        double angulo = atan2(dy, dx) * 180.0 / CV_PI;
+        double dy = (derecha.y - izquierda.y);
+        double dx = (derecha.x - izquierda.x);
+        double largo = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        double angulo = Math.atan2(dy, dx) * 180 / Math.PI;
 
         // Mediciones a mano muestran que el centro del ojo izquierdo debe ser idealmente en 
         //aproximadamente ( 0.19 , 0.14 ) de una imagen de la cara a escala
@@ -220,34 +223,54 @@ public class ReconocedorCara {
         Mat rot_mat = getRotationMatrix2D(centroOjos, angulo, escala);
 
         // Desplazar el centro de los ojos para ser el centro deseado entre los ojos 
-        DoubleIndexer matIdx = rot_mat.createIndexer();
-        matIdx.put(0, 2, matIdx.get(0, 2)+(caraAncho * 0.5f) - centroOjos.x());
-        matIdx.put(1, 2, matIdx.get(1, 2)+(caraAlto * DESEADO_OJO_IZQUIERDO_Y - centroOjos.y()));
-
+        
+        double[] aux = rot_mat.get(0, 2);
+        double[] aux2 = rot_mat.get(1, 2);
+        for (int i = 0; i < aux.length; i++) {
+            aux[i] += caraAncho * 0.5 - centroOjos.x;
+            aux2[i] += caraAlto * DESEADO_OJO_IZQUIERDO_Y - centroOjos.y;
+        }
+        rot_mat.put(0, 2,aux);
+        rot_mat.put(1, 2,aux2);
+        
         imagen = new Mat(caraAlto, caraAncho, CV_8U, new Scalar(128));
-
         warpAffine(cara, imagen, rot_mat, imagen.size());
 
         return imagen;
     }
-    
+
     /*
      *Convierte una imagen Mat(formato de opencv) a Image(formato de java)
      */
     public Image convertir(Mat imagen) {
-        BytePointer byteBuffer = new BytePointer();
-        imencode(".jpg", imagen, byteBuffer);
-        
-        byte[] byteArray = byteBuffer.getStringBytes();
+        MatOfByte matOfByte = new MatOfByte();
+        Imgcodecs.imencode(".jpg", imagen, matOfByte);
+
+        byte[] byteArray = matOfByte.toArray();
         BufferedImage bufImage = null;
-        
+
         try {
+
             InputStream in = new ByteArrayInputStream(byteArray);
             bufImage = ImageIO.read(in);
         } catch (Exception e) {
             System.out.println(e);
         }
         return (Image) bufImage;
+    }
+
+    /*
+     *Redondea al int mas cercano
+     */
+    private int round(double d) {
+        double dAbs = Math.abs(d);
+        int i = (int) dAbs;
+        double result = dAbs - (double) i;
+        if (result < 0.5) {
+            return d < 0 ? -i : i;
+        } else {
+            return d < 0 ? -(i + 1) : i + 1;
+        }
     }
 
 }
