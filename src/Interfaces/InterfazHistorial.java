@@ -5,6 +5,8 @@
  */
 package Interfaces;
 
+import Controladores.CtrlInterfazHistorial;
+
 /**
  *
  * @author javie
@@ -14,6 +16,7 @@ public class InterfazHistorial extends javax.swing.JFrame {
     /**
      * Creates new form InterfazHistorial
      */
+    private CtrlInterfazHistorial ctrlInterfazHistorial;
     public InterfazHistorial() {
         initComponents();
     }
@@ -27,7 +30,7 @@ public class InterfazHistorial extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -76,6 +79,11 @@ public class InterfazHistorial extends javax.swing.JFrame {
                 new InterfazHistorial().setVisible(true);
             }
         });
+    }
+
+    public void setControlador(CtrlInterfazHistorial ctrlInterfazHistorial) {
+    
+        this.ctrlInterfazHistorial = ctrlInterfazHistorial;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
