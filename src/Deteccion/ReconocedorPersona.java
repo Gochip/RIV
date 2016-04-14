@@ -1,14 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Utiliza un clasificador ya entrenado para detectar a quien pertenece una cara
  */
 package Deteccion;
 
-/**
- *
- * @author gastr
- */
 public class ReconocedorPersona {
+    
     
 }

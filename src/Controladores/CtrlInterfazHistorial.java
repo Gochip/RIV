@@ -20,10 +20,8 @@ public class CtrlInterfazHistorial {
         this.interfazHistorial = interfazHistorial;
     }
 
-    void abrirInterfazHistorial() {
-    
-        interfazHistorial = new InterfazHistorial();
-        interfazHistorial.setVisible(true);
+    void setVisibleInterfaz(boolean b) {
+        this.interfazHistorial.setVisible(b);
     }
     
 }

@@ -82,7 +82,6 @@ public class InterfazHistorial extends javax.swing.JFrame {
     }
 
     public void setControlador(CtrlInterfazHistorial ctrlInterfazHistorial) {
-    
         this.ctrlInterfazHistorial = ctrlInterfazHistorial;
     }
 

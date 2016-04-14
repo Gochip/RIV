@@ -20,6 +20,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
      * Creates new form InterfazPrin
      */
     private CtrlInterfazPrincipal ctrlInterfazPrincipal;
+
     public InterfazPrincipal() {
         initComponents();
     }
@@ -52,7 +53,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         lblHora = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        itemHistorial = new javax.swing.JMenuItem();
+        itemClasificador = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -180,8 +182,21 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
         jMenu1.setText("Ver");
 
-        jMenuItem1.setText("Historial");
-        jMenu1.add(jMenuItem1);
+        itemHistorial.setText("Historial");
+        itemHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemHistorialActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemHistorial);
+
+        itemClasificador.setText("Clasificador");
+        itemClasificador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemClasificadorActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemClasificador);
 
         jMenuBar1.add(jMenu1);
 
@@ -209,8 +224,16 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
-       
+
     }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void itemClasificadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemClasificadorActionPerformed
+        this.ctrlInterfazPrincipal.setVisibleInterfazClasificar(true);
+    }//GEN-LAST:event_itemClasificadorActionPerformed
+
+    private void itemHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemHistorialActionPerformed
+        this.ctrlInterfazPrincipal.setVisibleInterfazHistorial(true);
+    }//GEN-LAST:event_itemHistorialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,6 +273,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHistorial;
+    private javax.swing.JMenuItem itemClasificador;
+    private javax.swing.JMenuItem itemHistorial;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
@@ -259,7 +284,6 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
@@ -273,18 +297,18 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void setControlador(CtrlInterfazPrincipal ctrlInterfazPrincipal) {
-    this.ctrlInterfazPrincipal = ctrlInterfazPrincipal;
+        this.ctrlInterfazPrincipal = ctrlInterfazPrincipal;
     }
 
     public void setLblImagenCamara(Image imagen) {
         this.agregarImagenLabel(imagen, this.lblVideoCamara);
     }
-    
-     public void agregarImagenLabel(Image imagen, JLabel label) {
-         ImageIcon icon = new ImageIcon(imagen.getScaledInstance(label.getWidth(), label.getHeight(),
-                 Image.SCALE_SMOOTH));
-         label.setIcon(icon);
-     }
+
+    public void agregarImagenLabel(Image imagen, JLabel label) {
+        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(label.getWidth(), label.getHeight(),
+                Image.SCALE_SMOOTH));
+        label.setIcon(icon);
+    }
 
     public void setLblImagenEncontrada(Image imagen) {
         this.agregarImagenLabel(imagen, this.lblFoto);

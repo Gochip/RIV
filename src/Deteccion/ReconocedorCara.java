@@ -1,21 +1,13 @@
 package Deteccion;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import static org.opencv.core.CvType.CV_8U;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 import org.opencv.imgproc.Imgproc;
 import static org.opencv.imgproc.Imgproc.cvtColor;
 import static org.opencv.imgproc.Imgproc.equalizeHist;
@@ -24,9 +16,10 @@ import static org.opencv.imgproc.Imgproc.rectangle;
 import static org.opencv.imgproc.Imgproc.resize;
 import static org.opencv.imgproc.Imgproc.warpAffine;
 import org.opencv.objdetect.CascadeClassifier;
-import static org.opencv.objdetect.Objdetect.CASCADE_DO_ROUGH_SEARCH;
-import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
+/*
+    Esta clase reconoce una cara valida en una imagen
+*/
 public class ReconocedorCara {
 
     private final CascadeClassifier clasificadorCara;
@@ -237,26 +230,6 @@ public class ReconocedorCara {
         warpAffine(cara, imagen, rot_mat, imagen.size());
 
         return imagen;
-    }
-
-    /*
-     *Convierte una imagen Mat(formato de opencv) a Image(formato de java)
-     */
-    public Image convertir(Mat imagen) {
-        MatOfByte matOfByte = new MatOfByte();
-        Imgcodecs.imencode(".jpg", imagen, matOfByte);
-
-        byte[] byteArray = matOfByte.toArray();
-        BufferedImage bufImage = null;
-
-        try {
-
-            InputStream in = new ByteArrayInputStream(byteArray);
-            bufImage = ImageIO.read(in);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return (Image) bufImage;
     }
 
     /*

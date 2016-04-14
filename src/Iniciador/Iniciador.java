@@ -1,7 +1,11 @@
 package Iniciador;
 
+import Controladores.CtrlInterfazClasificar;
+import Controladores.CtrlInterfazHistorial;
 import Interfaces.InterfazPrincipal;
 import Controladores.CtrlInterfazPrincipal;
+import Interfaces.InterfazClasificar;
+import Interfaces.InterfazHistorial;
 import UpperEssential.UpperEssentialLookAndFeel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,13 +30,28 @@ public class Iniciador {
   
         CtrlInterfazPrincipal ctrlInterfazPrincipal;
         InterfazPrincipal interfazPrincipal;
+        InterfazClasificar interfazClasificar;
+        CtrlInterfazClasificar ctrlInterfazClasificar;
+        InterfazHistorial interfazHistorial;
+        CtrlInterfazHistorial ctrlInterfazHistorial;
 
-        ctrlInterfazPrincipal = new CtrlInterfazPrincipal();
         interfazPrincipal = new InterfazPrincipal();
+        ctrlInterfazPrincipal = new CtrlInterfazPrincipal();
+        interfazClasificar = new InterfazClasificar();
+        ctrlInterfazClasificar = new CtrlInterfazClasificar();
+        interfazHistorial = new InterfazHistorial();
+        ctrlInterfazHistorial = new CtrlInterfazHistorial();
 
-        ctrlInterfazPrincipal.setInterfaz(interfazPrincipal);
         interfazPrincipal.setControlador(ctrlInterfazPrincipal);
+        ctrlInterfazPrincipal.setInterfaz(interfazPrincipal);
+        interfazClasificar.setControlador(ctrlInterfazClasificar);
+        ctrlInterfazClasificar.setInterfaz(interfazClasificar);
+        interfazHistorial.setControlador(ctrlInterfazHistorial);
+        ctrlInterfazClasificar.setInterfaz(interfazClasificar);
 
+        ctrlInterfazPrincipal.setControladorInterfazHistorial(ctrlInterfazHistorial);
+        ctrlInterfazPrincipal.setContrladorInterfazClasificar(ctrlInterfazClasificar);
+        
         interfazPrincipal.setVisible(true);
         ctrlInterfazPrincipal.iniciarCaptura();
         
