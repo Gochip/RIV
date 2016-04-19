@@ -295,4 +295,20 @@ public class Guardador {
         }
         return listaPersonas;
     }
+
+    public void eliminarPersona(Integer legajo) {
+        if ("".equals(this.cargarDriver())) {
+            if ("".equals(this.conectarConMySQL())) {
+                try {
+                    PreparedStatement ps = conexion.prepareStatement("DELETE FROM personas WHERE legajo=?");
+                    ps.setInt(1, legajo);
+                    ps.executeUpdate();
+                    ps.close();
+                    conexion.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 }

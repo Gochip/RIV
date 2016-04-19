@@ -75,6 +75,11 @@ public class InterfazNuevaPersona extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         tablaPersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -161,6 +166,11 @@ public class InterfazNuevaPersona extends javax.swing.JFrame {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         this.ctrlInterfazNuevaPersona.nuevaPersona(this.txtLegajo.getText(),this.txtNombre.getText(),this.txtApellido.getText());
     }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        this.ctrlInterfazNuevaPersona.eliminarPersona(String.valueOf(this.tablaPersonas.getValueAt(
+                this.tablaPersonas.getSelectedRow(), 0)));
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments

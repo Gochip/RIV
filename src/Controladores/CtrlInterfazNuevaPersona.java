@@ -41,4 +41,10 @@ public class CtrlInterfazNuevaPersona {
         modeloTabla = new ModeloTablaPersonas();
         this.interfazNuevaPersona.setModeloTabla(modeloTabla);
     }
+
+    public void eliminarPersona(String legajo) {
+        guardador = new Guardador();
+        guardador.eliminarPersona(Integer.valueOf(legajo));
+        this.actualizarTabla();
+    }
 }
