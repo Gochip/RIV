@@ -4,6 +4,7 @@
 package Guardador;
 
 import Deteccion.Cara;
+import Deteccion.Persona;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Blob;
@@ -252,4 +253,22 @@ public class Guardador {
         return eliminado;
     }
 
+    public void insertarPersona(Persona persona) {
+        try {
+            if ("".equals(this.cargarDriver())) {
+                if ("".equals(this.conectarConMySQL())) {
+                    PreparedStatement ps = conexion.prepareStatement("INSERT INTO personas(legajo,nombre,apellido) "
+                            + "VALUES(?,?,?)");
+                    ps.setInt(1, persona.getLegajo());
+                    ps.setString(2, persona.getNombre());
+                    ps.setString(3, persona.getApellido());
+                    ps.executeUpdate();
+                    ps.close();
+                    conexion.close();
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

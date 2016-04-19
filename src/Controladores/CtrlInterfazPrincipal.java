@@ -30,6 +30,7 @@ public class CtrlInterfazPrincipal {
     private ReconocedorCara reconocedorCara;
     private CtrlInterfazHistorial ctrlInterfazHistorial;
     private CtrlInterfazClasificar ctrlInterfazClasificar;
+    private CtrlInterfazNuevaPersona ctrlInterfazNuevaPersona;
 
     public void setInterfaz(InterfazPrincipal interfazPrincipal) {
         this.interfazPrincipal = interfazPrincipal;
@@ -94,6 +95,10 @@ public class CtrlInterfazPrincipal {
 
     public void setVisibleInterfazClasificar(boolean b) {
         this.ctrlInterfazClasificar.setVisibleInterfaz(b);
+    }
+
+    public void setControladorInterfazNuevaPersona(CtrlInterfazNuevaPersona ctrlInterfazNuevaPersona) {
+        this.ctrlInterfazNuevaPersona = ctrlInterfazNuevaPersona;
     }
 
 }

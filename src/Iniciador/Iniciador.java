@@ -2,10 +2,12 @@ package Iniciador;
 
 import Controladores.CtrlInterfazClasificar;
 import Controladores.CtrlInterfazHistorial;
+import Controladores.CtrlInterfazNuevaPersona;
 import Interfaces.InterfazPrincipal;
 import Controladores.CtrlInterfazPrincipal;
 import Interfaces.InterfazClasificar;
 import Interfaces.InterfazHistorial;
+import Interfaces.InterfazNuevaPersona;
 import UpperEssential.UpperEssentialLookAndFeel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +36,9 @@ public class Iniciador {
         CtrlInterfazClasificar ctrlInterfazClasificar;
         InterfazHistorial interfazHistorial;
         CtrlInterfazHistorial ctrlInterfazHistorial;
+        InterfazNuevaPersona interfazNuevaPersona;
+        CtrlInterfazNuevaPersona ctrlInterfazNuevaPersona;
+        
 
         interfazPrincipal = new InterfazPrincipal();
         ctrlInterfazPrincipal = new CtrlInterfazPrincipal();
@@ -41,6 +46,8 @@ public class Iniciador {
         ctrlInterfazClasificar = new CtrlInterfazClasificar();
         interfazHistorial = new InterfazHistorial();
         ctrlInterfazHistorial = new CtrlInterfazHistorial();
+        interfazNuevaPersona = new InterfazNuevaPersona();
+        ctrlInterfazNuevaPersona = new CtrlInterfazNuevaPersona();
 
         interfazPrincipal.setControlador(ctrlInterfazPrincipal);
         ctrlInterfazPrincipal.setInterfaz(interfazPrincipal);
@@ -48,9 +55,12 @@ public class Iniciador {
         ctrlInterfazClasificar.setInterfaz(interfazClasificar);
         interfazHistorial.setControlador(ctrlInterfazHistorial);
         ctrlInterfazClasificar.setInterfaz(interfazClasificar);
+        interfazNuevaPersona.setControlador(ctrlInterfazNuevaPersona);
+        ctrlInterfazNuevaPersona.setInterfaz(interfazNuevaPersona);
 
         ctrlInterfazPrincipal.setControladorInterfazHistorial(ctrlInterfazHistorial);
         ctrlInterfazPrincipal.setContrladorInterfazClasificar(ctrlInterfazClasificar);
+        ctrlInterfazPrincipal.setControladorInterfazNuevaPersona(ctrlInterfazNuevaPersona);
         
         interfazPrincipal.setVisible(true);
         ctrlInterfazPrincipal.iniciarCaptura();
