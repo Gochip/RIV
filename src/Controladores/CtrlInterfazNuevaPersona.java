@@ -47,4 +47,8 @@ public class CtrlInterfazNuevaPersona {
         guardador.eliminarPersona(Integer.valueOf(legajo));
         this.actualizarTabla();
     }
+
+    void mostrarInterfaz(boolean b) {
+        this.interfazNuevaPersona.setVisible(b);
+    }
 }

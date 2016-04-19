@@ -101,4 +101,8 @@ public class CtrlInterfazPrincipal {
         this.ctrlInterfazNuevaPersona = ctrlInterfazNuevaPersona;
     }
 
+    public void nuevaPersona() {
+        this.ctrlInterfazNuevaPersona.mostrarInterfaz(true);
+    }
+
 }
