@@ -42,4 +42,21 @@ public class ModeloTablaPersonas extends AbstractTableModel{
             default: return null;
         }
     }   
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return tipoColumnas[columnIndex];
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return titulos[column];
+    }
+    
+    
 }

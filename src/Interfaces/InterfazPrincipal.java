@@ -55,6 +55,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         itemHistorial = new javax.swing.JMenuItem();
         itemClasificador = new javax.swing.JMenuItem();
+        itemNuevaPersona = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -198,6 +199,14 @@ public class InterfazPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(itemClasificador);
 
+        itemNuevaPersona.setText("Persona");
+        itemNuevaPersona.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemNuevaPersonaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemNuevaPersona);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Ayuda");
@@ -234,6 +243,10 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private void itemHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemHistorialActionPerformed
         this.ctrlInterfazPrincipal.setVisibleInterfazHistorial(true);
     }//GEN-LAST:event_itemHistorialActionPerformed
+
+    private void itemNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNuevaPersonaActionPerformed
+        this.ctrlInterfazPrincipal.nuevaPersona();
+    }//GEN-LAST:event_itemNuevaPersonaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -275,6 +288,7 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnHistorial;
     private javax.swing.JMenuItem itemClasificador;
     private javax.swing.JMenuItem itemHistorial;
+    private javax.swing.JMenuItem itemNuevaPersona;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;

@@ -36,7 +36,7 @@ public class Guardador {
     PreparedStatement ps;
 
     public Guardador() {
-        servidor = "jdbc:mysql://localhost";
+        servidor = "jdbc:mysql://localhost:3306/baseriv";
         usuario = "root";
         contraseña = "";
     }

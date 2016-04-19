@@ -26,6 +26,8 @@ public class CtrlInterfazNuevaPersona {
                     Persona persona = new Persona(Integer.valueOf(legajo),nombre,apellido);
                     guardador = new Guardador();
                     guardador.insertarPersona(persona);
+                    this.actualizarTabla();
+                    this.interfazNuevaPersona.limpiarInterfaz();
                 } else {
                     this.interfazNuevaPersona.setLabelValidacion("El apellido no puede estar vacio");
                 }
@@ -46,9 +48,11 @@ public class CtrlInterfazNuevaPersona {
         guardador = new Guardador();
         guardador.eliminarPersona(Integer.valueOf(legajo));
         this.actualizarTabla();
+        this.interfazNuevaPersona.limpiarInterfaz();
     }
 
     void mostrarInterfaz(boolean b) {
         this.interfazNuevaPersona.setVisible(b);
+        this.actualizarTabla();
     }
 }

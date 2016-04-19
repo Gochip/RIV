@@ -63,7 +63,7 @@ public class Iniciador {
         ctrlInterfazPrincipal.setControladorInterfazNuevaPersona(ctrlInterfazNuevaPersona);
         
         interfazPrincipal.setVisible(true);
-        ctrlInterfazPrincipal.iniciarCaptura();
+        //ctrlInterfazPrincipal.iniciarCaptura();
         
     }
 }

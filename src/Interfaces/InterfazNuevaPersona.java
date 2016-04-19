@@ -59,7 +59,7 @@ public class InterfazNuevaPersona extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Nombre");
 
@@ -233,5 +233,12 @@ public class InterfazNuevaPersona extends javax.swing.JFrame {
 
     public void setModeloTabla(ModeloTablaPersonas modeloTabla) {
         this.tablaPersonas.setModel(modeloTabla);
+    }
+
+    public void limpiarInterfaz() {
+        this.txtApellido.setText("");
+        this.txtLegajo.setText("");
+        this.txtNombre.setText("");
+        this.lblValidacion.setText("");
     }
 }
