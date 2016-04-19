@@ -271,4 +271,28 @@ public class Guardador {
             Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public ArrayList<Persona> getPersonas() {
+        ArrayList<Persona> listaPersonas = new ArrayList<>();
+        Persona persona;
+        if ("".equals(this.cargarDriver())) {
+            if ("".equals(this.conectarConMySQL())) {
+                try {
+                    PreparedStatement ps = conexion.prepareStatement("SELECT legajo,nombre,apellido FROM personas");
+                    ResultSet rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        persona = new Persona(rs.getInt(1), rs.getString(2), rs.getString(3));
+                        listaPersonas.add(persona);
+                    }
+                    rs.close();
+                    ps.close();
+                    conexion.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return listaPersonas;
+    }
 }

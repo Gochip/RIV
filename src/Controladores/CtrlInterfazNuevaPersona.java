@@ -1,5 +1,6 @@
 package Controladores;
 
+import Deteccion.ModeloTablaPersonas;
 import Deteccion.Persona;
 import Guardador.Guardador;
 import Interfaces.InterfazNuevaPersona;
@@ -12,6 +13,7 @@ public class CtrlInterfazNuevaPersona {
 
     private InterfazNuevaPersona interfazNuevaPersona;
     private Guardador guardador;
+    private ModeloTablaPersonas modeloTabla;
 
     public void setInterfaz(InterfazNuevaPersona interfazNuevaPersona) {
         this.interfazNuevaPersona = interfazNuevaPersona;
@@ -33,5 +35,10 @@ public class CtrlInterfazNuevaPersona {
         } else {
             this.interfazNuevaPersona.setLabelValidacion("El legajo no puede estar vacio");
         }
+    }
+    
+    private void actualizarTabla(){
+        modeloTabla = new ModeloTablaPersonas();
+        this.interfazNuevaPersona.setModeloTabla(modeloTabla);
     }
 }
