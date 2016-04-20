@@ -197,7 +197,7 @@ public class Guardador {
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
                     PreparedStatement ps = conexion.prepareStatement("SELECT legajo, COUNT(*) FROM "
-                            + "carasclasificador GRUOP BY legajo ORDER BY DESC");
+                            + "carasclasificador GROUP BY 1");
 
                     ResultSet rs = ps.executeQuery();
                     int i = 0;

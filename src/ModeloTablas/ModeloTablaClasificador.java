@@ -6,8 +6,6 @@
 package ModeloTablas;
 
 import Guardador.Guardador;
-import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -27,7 +25,12 @@ public class ModeloTablaClasificador extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return tabla[0].length;
+        if (tabla != null) {
+            return tabla[0].length;
+        } else {
+            return 0;
+        }
+
     }
 
     @Override
@@ -55,5 +58,4 @@ public class ModeloTablaClasificador extends AbstractTableModel {
         return titulos[column];
     }
 
-    
 }
