@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.opencv.core.CvType.CV_8UC3;
@@ -106,7 +105,7 @@ public class Guardador {
                         InputStream in = convertirImagen(cara.getImagen());
                         if (in != null) {
 
-                            PreparedStatement ps = conexion.prepareStatement("INSERT INTO "
+                            ps = conexion.prepareStatement("INSERT INTO "
                                     + "carasclasificador(legajo,imagen) "
                                     + "VALUES(?,?)");
 
@@ -175,7 +174,7 @@ public class Guardador {
 
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
-                    PreparedStatement ps = conexion.prepareStatement("SELECT legajo FROM personas WHERE legajo=?");
+                    ps = conexion.prepareStatement("SELECT legajo FROM personas WHERE legajo=?");
 
                     ps.setInt(1, legajo);
                     ResultSet rs = ps.executeQuery();
@@ -196,16 +195,21 @@ public class Guardador {
         try {
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
-                    PreparedStatement ps = conexion.prepareStatement("SELECT legajo, COUNT(*) FROM "
-                            + "carasclasificador GROUP BY 1");
-
+                    ps = conexion.prepareStatement("SELECT COUNT(*) FROM personas");
                     ResultSet rs = ps.executeQuery();
-                    int i = 0;
-                    if (rs.getRow() > 0) {
-                        tabla = new int[rs.getRow()][2];
+                    rs.next();
+
+                    int cantLeg = rs.getInt(1);
+                    if (cantLeg > 0) {
+                        ps = conexion.prepareStatement("SELECT legajo, COUNT(*) FROM "
+                                + "carasclasificador GROUP BY 1");
+
+                        rs = ps.executeQuery();
+                        int i = 0;
+                        tabla = new int[cantLeg][2];
                         while (rs.next()) {
                             tabla[i][0] = rs.getInt(1);
-                            tabla[i][2] = rs.getInt(2);
+                            tabla[i][1] = rs.getInt(2);
                             i++;
                         }
                     }

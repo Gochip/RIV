@@ -26,7 +26,7 @@ public class ModeloTablaClasificador extends AbstractTableModel {
     @Override
     public int getRowCount() {
         if (tabla != null) {
-            return tabla[0].length;
+            return tabla.length;
         } else {
             return 0;
         }

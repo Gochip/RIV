@@ -36,10 +36,8 @@ public class InterfazClasificar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblCamara = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaImagenesClasificador = new javax.swing.JTable();
-        lblCaraEncontrada = new javax.swing.JLabel();
         btnNuevaPersona = new javax.swing.JButton();
         btnEliminarSeleccionado = new javax.swing.JButton();
         lblValidacion = new javax.swing.JLabel();
@@ -48,9 +46,7 @@ public class InterfazClasificar extends javax.swing.JFrame {
         txtLegajo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lblCamara.setText("Camara");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tablaImagenesClasificador.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -72,8 +68,6 @@ public class InterfazClasificar extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaImagenesClasificador);
-
-        lblCaraEncontrada.setText("Cara Encontrada");
 
         btnNuevaPersona.setText("Nueva Persona");
         btnNuevaPersona.addActionListener(new java.awt.event.ActionListener() {
@@ -104,75 +98,66 @@ public class InterfazClasificar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCaraEncontrada, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblValidacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(btnNuevaPersona, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnEliminarSeleccionado, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                            .addComponent(txtCantidadImagenes)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtLegajo))))
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtLegajo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                                        .addComponent(txtCantidadImagenes, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addComponent(btnNuevaPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(169, 169, 169))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblValidacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnEliminarSeleccionado)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtLegajo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCantidadImagenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnNuevaPersona)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCamara, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEliminarSeleccionado))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCaraEncontrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblValidacion, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEliminarSeleccionado)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblValidacion, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaPersonaActionPerformed
-        this.limpiarInterfaz();
         if (!"".equals(this.txtCantidadImagenes.getText())) {
             this.ctrlInterfazClasificar.nuevaPersona(Integer.valueOf(this.txtCantidadImagenes.getText()),
                     this.txtLegajo.getText());
+        } else {
+            this.ctrlInterfazClasificar.nuevaPersona(0, this.txtLegajo.getText());
         }
-        else{
-            this.ctrlInterfazClasificar.nuevaPersona(0,this.txtLegajo.getText());
-        }
+        this.limpiarInterfaz();
     }//GEN-LAST:event_btnNuevaPersonaActionPerformed
 
     private void btnEliminarSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarSeleccionadoActionPerformed
-        this.limpiarInterfaz();
         this.ctrlInterfazClasificar.eliminarCarasClasificador(
                 (int) this.tablaImagenesClasificador.getValueAt(this.tablaImagenesClasificador.getSelectedRow(), 0));
+        this.limpiarInterfaz();
     }//GEN-LAST:event_btnEliminarSeleccionadoActionPerformed
 
     /**
@@ -220,8 +205,6 @@ public class InterfazClasificar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblCamara;
-    private javax.swing.JLabel lblCaraEncontrada;
     private javax.swing.JLabel lblValidacion;
     private javax.swing.JTable tablaImagenesClasificador;
     private javax.swing.JTextField txtCantidadImagenes;
@@ -239,27 +222,10 @@ public class InterfazClasificar extends javax.swing.JFrame {
     public void setModeloTabla(ModeloTablaClasificador modeloTabla) {
         this.tablaImagenesClasificador.setModel(modeloTabla);
     }
-    
-    private void limpiarInterfaz(){
+
+    private void limpiarInterfaz() {
         this.setLabelValidacion("");
         this.setTxtCantidadImagenes("");
         this.txtLegajo.setText("");
-        this.lblCamara.setIcon(null);
-        this.lblCaraEncontrada.setIcon(null);
     }
-    
-    public void agregarImagenLabel(Image imagen, JLabel label) {
-        ImageIcon icon = new ImageIcon(imagen.getScaledInstance(label.getWidth(), label.getHeight(),
-                Image.SCALE_SMOOTH));
-        label.setIcon(icon);
-    }
-
-    public void setLblImagenCamara(Image imagen) {
-        this.agregarImagenLabel(imagen, this.lblCamara);
-    }
-
-    public void setLblImagenEncontrada(Image imagen) {
-        this.agregarImagenLabel(imagen, this.lblCaraEncontrada);
-    }
-
 }

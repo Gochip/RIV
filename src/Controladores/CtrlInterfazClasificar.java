@@ -43,11 +43,14 @@ public class CtrlInterfazClasificar {
     }
 
     public void nuevaPersona(int cantidad, String legajo) {
-        capturador = new Capturador(0);
-        if (capturador.conectarCamara()) {
 
-            if ("".equals(legajo)) {
-                if (guardador.existeLegajo(Integer.valueOf(legajo))) {
+        if (!"".equals(legajo)) {
+            guardador = new Guardador();
+            int leg = Integer.valueOf(legajo);
+            if (guardador.existeLegajo(leg)) {
+                capturador = new Capturador(0);
+                if (capturador.conectarCamara()) {
+
                     if (cantidad == 0) {
                         cantidad = 15;
                         this.interfazClasificar.setTxtCantidadImagenes("15");
@@ -58,7 +61,7 @@ public class CtrlInterfazClasificar {
                     ArrayList<Cara> aux;
                     reconocedorCara = new ReconocedorCara();
                     int i = 0;
-                    
+
                     while (imagenes.size() <= cantidad) {
                         imagen = capturador.getImagen();
 
@@ -67,64 +70,40 @@ public class CtrlInterfazClasificar {
                             aux = reconocedorCara.detectarCaras(imagen);
                             if (aux.size() == 1) {
                                 i++;
+                                aux.get(0).setLegajo(leg);
                                 imagenes.add(aux.get(0));
-                                this.interfazClasificar.setLblImagenEncontrada(
-                                        this.convertir(aux.get(0).getImagen()));
                                 this.interfazClasificar.setLabelValidacion(Integer.toString(i));
                             }
                         }
-                        this.interfazClasificar.setLblImagenCamara(this.convertir(imagen));
                     }
                     this.guardador = new Guardador();
                     this.guardador.guardarCarasClasificador(imagenes);
                     this.actualizarTabla();
                     this.interfazClasificar.setLabelValidacion("Se han guardado los ejemplos correctamente");
-                }
-                else{
-                    this.interfazClasificar.setLabelValidacion("No existe una persona con ese legajo");
+                } else {
+                    this.interfazClasificar.setLabelValidacion("No se pudo conectar con la camara");
                 }
             } else {
                 this.interfazClasificar.setLabelValidacion("Debe especificar el numero de legajo");
             }
         } else {
-            this.interfazClasificar.setLabelValidacion("No se pudo conectar con la camara");
+            this.interfazClasificar.setLabelValidacion("No existe una persona con ese legajo");
+
         }
     }
-    
-    public void actualizarTabla(){
+
+    public void actualizarTabla() {
         modeloTabla = new ModeloTablaClasificador();
         this.interfazClasificar.setModeloTabla(modeloTabla);
     }
 
     public void eliminarCarasClasificador(int legajo) {
         this.guardador = new Guardador();
-        if(this.guardador.eliminarCarasClasificador(legajo)){
+        if (this.guardador.eliminarCarasClasificador(legajo)) {
             this.interfazClasificar.setLabelValidacion("Se ha eliminado correctamente");
-        }
-        else{
+        } else {
             this.interfazClasificar.setLabelValidacion("No se a podido eliminar el registro");
         }
         this.actualizarTabla();
     }
-    
-     /*
-        Convierte una imagen Mat(formato de opencv) a Image(formato de java)
-     */
-    private Image convertir(Mat imagen) {
-        MatOfByte matOfByte = new MatOfByte();
-        Imgcodecs.imencode(".jpg", imagen, matOfByte);
-
-        byte[] byteArray = matOfByte.toArray();
-        BufferedImage bufImage = null;
-
-        try {
-
-            InputStream in = new ByteArrayInputStream(byteArray);
-            bufImage = ImageIO.read(in);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return (Image) bufImage;
-    }
-
 }
