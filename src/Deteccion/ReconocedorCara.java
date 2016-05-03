@@ -19,7 +19,7 @@ import org.opencv.objdetect.CascadeClassifier;
 
 /*
     Esta clase reconoce una cara valida en una imagen
-*/
+ */
 public class ReconocedorCara {
 
     private final CascadeClassifier clasificadorCara;
@@ -44,8 +44,8 @@ public class ReconocedorCara {
         //Usados para estabilizar la imagen
         this.caraAncho = 100;
         this.caraAlto = 100;
-        this.DESEADO_OJO_IZQUIERDO_X = 0.19;
-        this.DESEADO_OJO_IZQUIERDO_Y = 0.14;
+        this.DESEADO_OJO_IZQUIERDO_X = 0.14;
+        this.DESEADO_OJO_IZQUIERDO_Y = 0.19;
 
         //Usados para detectar las coordenadas de los ojos
         //haarcascade_eye_tree_eyeglasses.xml
@@ -99,10 +99,24 @@ public class ReconocedorCara {
         //Recorro todas las posibles caras detectadas
         Mat cara;
         Cara C;
+        double escalaX =(double) imagen.cols() / this.reducirTamaño;
+        double escalaY =(double) imagen.rows() / this.reducirTamaño;
+        double xi;
+        double yi;
+        double xf;
+        double yf;
+
         for (Rect rect : vectorCaras.toArray()) {
             //Obtengo una cara clasificada
             cara = new Mat(imagenNormalizada, rect);
-            rectangle(imagen, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
+            
+            //Marco la cara detectada en la imagen original
+            xi = escalaX * rect.x;
+            yi = escalaY * rect.y;
+            xf = escalaX * (rect.x + rect.width);
+            yf = escalaY * (rect.y + rect.height);
+
+            rectangle(imagen, new Point(xi, yi), new Point(xf, yf),
                     new Scalar(0, 255, 255));
 
             //Intento detectar los ojos
@@ -134,11 +148,11 @@ public class ReconocedorCara {
         Mat arribaIzquierdaCara = new Mat(cara, new Rect(izquierdaX, arribaY, anchoX, altoY));
         Mat arribaDerechaCara = new Mat(cara, new Rect(derechaX, arribaY, anchoX, altoY));
 
-        rectangle(cara, new Point(izquierdaX, arribaY), new Point(anchoX + izquierdaX, arribaY + altoY),
-                new Scalar(0, 255, 255));
-        rectangle(cara, new Point(derechaX, arribaY), new Point(anchoX + derechaX, arribaY + altoY),
-                new Scalar(0, 255, 255));
-
+        //Descomentar para visualizar la deteccion de los ojos
+//        rectangle(cara, new Point(izquierdaX, arribaY), new Point(anchoX + izquierdaX, arribaY + altoY),
+//                new Scalar(0, 255, 255));
+//        rectangle(cara, new Point(derechaX, arribaY), new Point(anchoX + derechaX, arribaY + altoY),
+//                new Scalar(0, 255, 255));
         MatOfRect vectorOjoIzquierdo = new MatOfRect();
         MatOfRect vectorOjoDerecho = new MatOfRect();
 
@@ -216,16 +230,15 @@ public class ReconocedorCara {
         Mat rot_mat = getRotationMatrix2D(centroOjos, angulo, escala);
 
         // Desplazar el centro de los ojos para ser el centro deseado entre los ojos 
-        
         double[] aux = rot_mat.get(0, 2);
         double[] aux2 = rot_mat.get(1, 2);
         for (int i = 0; i < aux.length; i++) {
             aux[i] += caraAncho * 0.5 - centroOjos.x;
             aux2[i] += caraAlto * DESEADO_OJO_IZQUIERDO_Y - centroOjos.y;
         }
-        rot_mat.put(0, 2,aux);
-        rot_mat.put(1, 2,aux2);
-        
+        rot_mat.put(0, 2, aux);
+        rot_mat.put(1, 2, aux2);
+
         imagen = new Mat(caraAlto, caraAncho, CV_8U, new Scalar(128));
         warpAffine(cara, imagen, rot_mat, imagen.size());
 

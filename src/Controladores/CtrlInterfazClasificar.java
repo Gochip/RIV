@@ -7,19 +7,14 @@ package Controladores;
 
 import Deteccion.Capturador;
 import Deteccion.Cara;
+import Deteccion.Clasificador;
 import Deteccion.ReconocedorCara;
 import Guardador.Guardador;
 import Interfaces.InterfazClasificar;
 import ModeloTablas.ModeloTablaClasificador;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.core.Size;
 
 /**
  *
@@ -60,8 +55,7 @@ public class CtrlInterfazClasificar {
                     ArrayList<Cara> imagenes = new ArrayList<>();
                     ArrayList<Cara> aux;
                     reconocedorCara = new ReconocedorCara();
-                    int i = 0;
-
+                    
                     while (imagenes.size() <= cantidad) {
                         imagen = capturador.getImagen();
 
@@ -69,10 +63,8 @@ public class CtrlInterfazClasificar {
 
                             aux = reconocedorCara.detectarCaras(imagen);
                             if (aux.size() == 1) {
-                                i++;
                                 aux.get(0).setLegajo(leg);
                                 imagenes.add(aux.get(0));
-                                this.interfazClasificar.setLabelValidacion(Integer.toString(i));
                             }
                         }
                     }
@@ -105,5 +97,9 @@ public class CtrlInterfazClasificar {
             this.interfazClasificar.setLabelValidacion("No se a podido eliminar el registro");
         }
         this.actualizarTabla();
+    }
+
+    public void entrenar() {
+        Clasificador clasificador = new Clasificador();
     }
 }

@@ -5,6 +5,7 @@ package Guardador;
 
 import Deteccion.Cara;
 import Deteccion.Persona;
+import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Blob;
@@ -16,6 +17,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.core.CvType.CV_8UC2;
 import static org.opencv.core.CvType.CV_8UC3;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -150,7 +153,7 @@ public class Guardador {
                         blob = rs.getBlob(2);
                         byte[] pixeles = blob.getBytes(1, (int) blob.length());
 
-                        m = new Mat(tamaño, CV_8UC3);
+                        m = new Mat(tamaño, CV_8UC1);
                         m.put(0, 0, pixeles);
 
                         C = new Cara(m, rs.getInt(1));
@@ -282,7 +285,7 @@ public class Guardador {
         if ("".equals(this.cargarDriver())) {
             if ("".equals(this.conectarConMySQL())) {
                 try {
-                    PreparedStatement ps = conexion.prepareStatement("SELECT legajo,nombre,apellido FROM personas");
+                    ps = conexion.prepareStatement("SELECT legajo,nombre,apellido FROM personas");
                     ResultSet rs = ps.executeQuery();
 
                     while (rs.next()) {

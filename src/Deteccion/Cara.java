@@ -5,6 +5,8 @@ package Deteccion;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
+import org.opencv.core.Size;
+import static org.opencv.imgproc.Imgproc.resize;
 
 public class Cara {
     private Mat imagen;
@@ -55,4 +57,7 @@ public class Cara {
         this.legajo = legajo;
     }
     
+    public void ajustarTamaño(Size tamaño){
+        resize(this.imagen,this.imagen,tamaño);
+    }
 }

@@ -6,6 +6,8 @@ package Deteccion;
 import Guardador.Guardador;
 import java.util.ArrayList;
 import org.opencv.core.Size;
+import org.opencv.ml.SVM;
+
 
 /**
  *
@@ -19,14 +21,15 @@ public class Clasificador {
     */
     public Clasificador() {
         Guardador conexion = new Guardador();
-        imagenes = conexion.getCarasClasificador(new Size(30,30));
+        imagenes = conexion.getCarasClasificador(new Size(100,100));
     }
     
     /*
         Entrena una Red para detectar las diferentes caras
     */
     public void entrenar(){
-        
+       SVM clasificador;
+       
     }
     
 }
