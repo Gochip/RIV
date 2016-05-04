@@ -327,4 +327,8 @@ public class InterfazPrincipal extends javax.swing.JFrame {
     public void setLblImagenEncontrada(Image imagen) {
         this.agregarImagenLabel(imagen, this.lblFoto);
     }
+
+    public void setLblLegajo(int legajo) {
+        this.txtLegajo.setText(Integer.toString(legajo));
+    }
 }

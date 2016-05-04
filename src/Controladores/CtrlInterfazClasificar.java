@@ -14,7 +14,6 @@ import Interfaces.InterfazClasificar;
 import ModeloTablas.ModeloTablaClasificador;
 import java.util.ArrayList;
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
 
 /**
  *
@@ -27,6 +26,7 @@ public class CtrlInterfazClasificar {
     private ReconocedorCara reconocedorCara;
     private Guardador guardador;
     private ModeloTablaClasificador modeloTabla;
+    private CtrlInterfazPrincipal ctrlInterfazPrincipal;
 
     public void setInterfaz(InterfazClasificar interfazClasificar) {
         this.interfazClasificar = interfazClasificar;
@@ -100,6 +100,6 @@ public class CtrlInterfazClasificar {
     }
 
     public void entrenar() {
-        Clasificador clasificador = new Clasificador();
+       
     }
 }

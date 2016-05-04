@@ -7,6 +7,7 @@ package Controladores;
 
 import Deteccion.Capturador;
 import Deteccion.Cara;
+import Deteccion.Clasificador;
 import Deteccion.ReconocedorCara;
 import Interfaces.InterfazPrincipal;
 import java.awt.Image;
@@ -31,7 +32,17 @@ public class CtrlInterfazPrincipal {
     private CtrlInterfazHistorial ctrlInterfazHistorial;
     private CtrlInterfazClasificar ctrlInterfazClasificar;
     private CtrlInterfazNuevaPersona ctrlInterfazNuevaPersona;
+    private final Clasificador clasificador;
 
+    public CtrlInterfazPrincipal() {
+        clasificador = new Clasificador();
+        this.entrenarClasificador();
+    }
+    
+    public boolean entrenarClasificador(){
+        return clasificador.entrenar();
+    }
+    
     public void setInterfaz(InterfazPrincipal interfazPrincipal) {
         this.interfazPrincipal = interfazPrincipal;
     }
@@ -49,6 +60,9 @@ public class CtrlInterfazPrincipal {
                     if (vectorCaras.size() >= 1) {
                         this.interfazPrincipal.setLblImagenEncontrada(
                                 convertir(vectorCaras.get(0).getImagen()));
+                        this.clasificador.getLegajo(vectorCaras);
+                        this.interfazPrincipal.setLblLegajo(vectorCaras.get(0).getLegajo());
+                       // putText(img, "OpenCV 2", Point(180,320), FONT_HERSHEY_SCRIPT_COMPLEX, 3, CV_RGB(125,12,145), 2);
 
                     }
                     this.interfazPrincipal.setLblImagenCamara(convertir(imagenMat));
