@@ -122,6 +122,7 @@ public class ReconocedorCara {
             //Intento detectar los ojos
             C = this.detectarOjos(cara);
             if (C != null) {
+                C.setPuntoComienzo(rect.tl());
                 //Si se detectaron se agregan al ArrayList
                 //Pero antes se estabiliza la imagen
                 C.setImagen(this.getImagenEstabilizada(C.getImagen(),

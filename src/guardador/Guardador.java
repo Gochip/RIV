@@ -6,7 +6,15 @@ package Guardador;
 import Deteccion.Cara;
 import Deteccion.Persona;
 import com.sun.java.swing.plaf.windows.WindowsTreeUI;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -17,6 +25,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import static org.opencv.core.CvType.CV_8UC1;
 import static org.opencv.core.CvType.CV_8UC2;
 import static org.opencv.core.CvType.CV_8UC3;
@@ -24,6 +35,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
 /**
  *
@@ -76,45 +88,56 @@ public class Guardador {
 
     public boolean guardarCaraDetectada(Cara cara) {
         boolean guardado = false;
-        InputStream in = convertirImagen(cara.getImagen());
-        if (in != null) {
-            try {
+        File midir = new File(".");
+        File imagen;
+        try {
+            imwrite("imagen.jpg", cara.getImagen());
+            imagen = new File(midir.getCanonicalPath());
+            if (imagen.exists()) {
+
                 if ("".equals(this.cargarDriver())) {
                     if ("".equals(this.conectarConMySQL())) {
-                        PreparedStatement ps = conexion.prepareStatement("INSERT INTO carasdetectadas(legajo,imagen,fecha) "
+                        ps = conexion.prepareStatement("INSERT INTO carasdetectadas(legajo,imagen,fecha) "
                                 + "VALUES(?,?,NOW())");
 
                         ps.setInt(1, cara.getLegajo());
-                        ps.setBinaryStream(2, in);
+                        ps.setBinaryStream(2, new FileInputStream(imagen), imagen.length());
                         guardado = ps.execute();
                         ps.close();
                         conexion.close();
                     }
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return guardado;
     }
 
     public boolean guardarCarasClasificador(ArrayList<Cara> imagenes) {
-        boolean guardado = false;
+        boolean guardado = true;
         try {
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
                     conexion.setAutoCommit(false);
+                    File midir = new File(".");
+                    File imagen;
                     for (Cara cara : imagenes) {
-                        InputStream in = convertirImagen(cara.getImagen());
-                        if (in != null) {
-
+                        imwrite("imagen.jpg", cara.getImagen());
+                        imagen = new File(midir.getCanonicalPath() + "\\imagen.jpg");
+                        if (imagen.exists()) {
                             ps = conexion.prepareStatement("INSERT INTO "
                                     + "carasclasificador(legajo,imagen) "
                                     + "VALUES(?,?)");
 
                             ps.setInt(1, cara.getLegajo());
-                            ps.setBinaryStream(2, in);
-                            guardado = ps.execute();
+                            ps.setBinaryStream(2, new FileInputStream(imagen), imagen.length());
+                            ps.executeUpdate();
                         }
                     }
 
@@ -132,6 +155,10 @@ public class Guardador {
                 Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return guardado;
@@ -143,7 +170,7 @@ public class Guardador {
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
 
-                    PreparedStatement ps = conexion.prepareStatement("SELECT legajo, imagen FROM carasclasificador");
+                    ps = conexion.prepareStatement("SELECT legajo,imagen FROM carasclasificador");
                     ResultSet rs = ps.executeQuery();
 
                     Cara C;
@@ -151,10 +178,13 @@ public class Guardador {
                     Mat m;
                     while (rs.next()) {
                         blob = rs.getBlob(2);
-                        byte[] pixeles = blob.getBytes(1, (int) blob.length());
-
+                        byte[] data = blob.getBytes(1, (int) blob.length());
+                        BufferedImage img = null;
+                        img = ImageIO.read(new ByteArrayInputStream(data));
+                        Image imagen = (Image)img;
+                        
                         m = new Mat(tamaño, CV_8UC1);
-                        m.put(0, 0, pixeles);
+                        m.put(0, 0, );
 
                         C = new Cara(m, rs.getInt(1));
                         imagenes.add(C);
@@ -166,6 +196,8 @@ public class Guardador {
                 }
             }
         } catch (SQLException ex) {
+            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return imagenes;
@@ -227,10 +259,10 @@ public class Guardador {
         return tabla;
     }
 
-    private InputStream convertirImagen(Mat imagen) {
-        InputStream in = null;
+    private InputStream convertir(Mat imagen) {
         MatOfByte matOfByte = new MatOfByte();
         Imgcodecs.imencode(".jpg", imagen, matOfByte);
+        InputStream in = null;
         byte[] byteArray = matOfByte.toArray();
 
         try {

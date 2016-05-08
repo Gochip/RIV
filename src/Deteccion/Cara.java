@@ -4,15 +4,18 @@
 package Deteccion;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import static org.opencv.imgproc.Imgproc.resize;
 
 public class Cara {
+
     private Mat imagen;
     private Rect OjoDerecho;
     private Rect OjoIzquierdo;
     private int legajo;
+    private Point puntoComienzo;
 
     public Cara(Mat imagen, Rect OjoDerecho, Rect OjoIzquierdo) {
         this.imagen = imagen;
@@ -56,8 +59,16 @@ public class Cara {
     public void setLegajo(int legajo) {
         this.legajo = legajo;
     }
-    
-    public void ajustarTamaño(Size tamaño){
-        resize(this.imagen,this.imagen,tamaño);
+
+    public void ajustarTamaño(Size tamaño) {
+        resize(this.imagen, this.imagen, tamaño);
+    }
+
+    public Point getPuntoComienzo() {
+        return puntoComienzo;
+    }
+
+    public void setPuntoComienzo(Point puntoComienzo) {
+        this.puntoComienzo = puntoComienzo;
     }
 }

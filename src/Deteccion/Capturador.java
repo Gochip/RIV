@@ -144,4 +144,5 @@ public class Capturador {
         cap = new VideoCapture("\"http://" + ipCamara + "/video?x.mjpeg");
     }
 
+
 }

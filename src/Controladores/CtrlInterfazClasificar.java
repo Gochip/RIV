@@ -12,8 +12,16 @@ import Deteccion.ReconocedorCara;
 import Guardador.Guardador;
 import Interfaces.InterfazClasificar;
 import ModeloTablas.ModeloTablaClasificador;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.SwingWorker;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
 /**
  *
@@ -26,7 +34,7 @@ public class CtrlInterfazClasificar {
     private ReconocedorCara reconocedorCara;
     private Guardador guardador;
     private ModeloTablaClasificador modeloTabla;
-    private CtrlInterfazPrincipal ctrlInterfazPrincipal;
+    private Conectar con;
 
     public void setInterfaz(InterfazClasificar interfazClasificar) {
         this.interfazClasificar = interfazClasificar;
@@ -43,44 +51,15 @@ public class CtrlInterfazClasificar {
             guardador = new Guardador();
             int leg = Integer.valueOf(legajo);
             if (guardador.existeLegajo(leg)) {
-                capturador = new Capturador(0);
-                if (capturador.conectarCamara()) {
-
-                    if (cantidad == 0) {
-                        cantidad = 15;
-                        this.interfazClasificar.setTxtCantidadImagenes("15");
-                    }
-
-                    Mat imagen;
-                    ArrayList<Cara> imagenes = new ArrayList<>();
-                    ArrayList<Cara> aux;
-                    reconocedorCara = new ReconocedorCara();
-                    
-                    while (imagenes.size() <= cantidad) {
-                        imagen = capturador.getImagen();
-
-                        if (imagen != null) {
-
-                            aux = reconocedorCara.detectarCaras(imagen);
-                            if (aux.size() == 1) {
-                                aux.get(0).setLegajo(leg);
-                                imagenes.add(aux.get(0));
-                            }
-                        }
-                    }
-                    this.guardador = new Guardador();
-                    this.guardador.guardarCarasClasificador(imagenes);
-                    this.actualizarTabla();
-                    this.interfazClasificar.setLabelValidacion("Se han guardado los ejemplos correctamente");
-                } else {
-                    this.interfazClasificar.setLabelValidacion("No se pudo conectar con la camara");
-                }
+                this.guardador = new Guardador();
+                con = new Conectar(cantidad, leg);
+                con.execute();
+                this.actualizarTabla();
             } else {
                 this.interfazClasificar.setLabelValidacion("Debe especificar el numero de legajo");
             }
         } else {
             this.interfazClasificar.setLabelValidacion("No existe una persona con ese legajo");
-
         }
     }
 
@@ -99,7 +78,81 @@ public class CtrlInterfazClasificar {
         this.actualizarTabla();
     }
 
+    /*
+        Convierte una imagen Mat(formato de opencv) a Image(formato de java)
+     */
+    private Image convertir(Mat imagen) {
+        MatOfByte matOfByte = new MatOfByte();
+        Imgcodecs.imencode(".jpg", imagen, matOfByte);
+
+        byte[] byteArray = matOfByte.toArray();
+        BufferedImage bufImage = null;
+
+        try {
+
+            InputStream in = new ByteArrayInputStream(byteArray);
+            bufImage = ImageIO.read(in);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return (Image) bufImage;
+    }
+
     public void entrenar() {
-       
+        Clasificador.getSingletonInstance().entrenar();
+    }
+
+    private class Conectar extends SwingWorker<Void, Void> {
+
+        private int cantidad;
+        private final int legajo;
+
+        public Conectar(int cantidad, int legajo) {
+            this.cantidad = cantidad;
+            this.legajo = legajo;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            ArrayList<Cara> imagenes = new ArrayList<>();
+            //Conecta con la camara
+            capturador = new Capturador(0);
+            if (capturador.conectarCamara()) {
+
+                if (cantidad == 0) {
+                    cantidad = 15;
+                    interfazClasificar.setTxtCantidadImagenes("15");
+                }
+
+                Mat imagen;
+                ArrayList<Cara> aux;
+                reconocedorCara = new ReconocedorCara();
+
+                while (imagenes.size() <= cantidad) {
+                    imagen = capturador.getImagen();
+
+                    if (imagen != null) {
+
+                        aux = reconocedorCara.detectarCaras(imagen);
+                        if (aux.size() == 1) {
+                            interfazClasificar.setLblImagenEncontrada(
+                                    convertir(aux.get(0).getImagen()));
+                            aux.get(0).setLegajo(legajo);
+                            imagenes.add(aux.get(0));
+                        }
+                    }
+                    interfazClasificar.setLblImagenCamara(convertir(imagen));
+                    interfazClasificar.setLabelValidacion("Se almacenaron : " + imagenes.size());
+                }
+            } else {
+                interfazClasificar.setLabelValidacion("No se pudo conectar con la camara");
+            }
+            interfazClasificar.setLabelValidacion("Guardando imagenes...");
+            guardador.guardarCarasClasificador(imagenes);
+            interfazClasificar.setLabelValidacion("Se han guardado los ejemplos correctamente");
+
+            return null;
+        }
+
     }
 }
