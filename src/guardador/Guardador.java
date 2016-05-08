@@ -9,6 +9,7 @@ import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -125,18 +126,19 @@ public class Guardador {
             if ("".equals(this.cargarDriver())) {
                 if ("".equals(this.conectarConMySQL())) {
                     conexion.setAutoCommit(false);
-                    File midir = new File(".");
-                    File imagen;
+                    //File midir = new File(".");
+                    //File imagen;
                     for (Cara cara : imagenes) {
-                        imwrite("imagen.jpg", cara.getImagen());
-                        imagen = new File(midir.getCanonicalPath() + "\\imagen.jpg");
-                        if (imagen.exists()) {
+                      //  imwrite("imagen.jpg", cara.getImagen());
+                        //imagen = new File(midir.getCanonicalPath() + "\\imagen.jpg");
+                       InputStream in = this.convertir(cara.getImagen());
+                        if (in !=null) {
                             ps = conexion.prepareStatement("INSERT INTO "
                                     + "carasclasificador(legajo,imagen) "
                                     + "VALUES(?,?)");
 
                             ps.setInt(1, cara.getLegajo());
-                            ps.setBinaryStream(2, new FileInputStream(imagen), imagen.length());
+                            ps.setBinaryStream(2, in, cara.getImagen().cols()*cara.getImagen().rows());
                             ps.executeUpdate();
                         }
                     }
@@ -154,10 +156,6 @@ public class Guardador {
             } catch (SQLException ex1) {
                 Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex1);
             }
-            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
             Logger.getLogger(Guardador.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -179,12 +177,11 @@ public class Guardador {
                     while (rs.next()) {
                         blob = rs.getBlob(2);
                         byte[] data = blob.getBytes(1, (int) blob.length());
-                        BufferedImage img = null;
+                        BufferedImage img;
                         img = ImageIO.read(new ByteArrayInputStream(data));
-                        Image imagen = (Image)img;
-                        
+
                         m = new Mat(tamaño, CV_8UC1);
-                        m.put(0, 0, );
+                        m.put(0, 0, ((DataBufferByte) img.getRaster().getDataBuffer()).getData());
 
                         C = new Cara(m, rs.getInt(1));
                         imagenes.add(C);

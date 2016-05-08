@@ -31,10 +31,10 @@ public class Clasificador {
         if (clasificador == null) {
             clasificador = new Clasificador();
         }
-        
+
         return clasificador;
     }
-    
+
     /*
         Obtienes las imagenes para entrenar el clasificador de la base de datos
      */
@@ -53,7 +53,7 @@ public class Clasificador {
         if (imagenes.size() > 0) {
             //Configuro el clasificador
             svm.setType(SVM.C_SVC);
-            svm.setKernel(SVM.RBF);
+            svm.setKernel(SVM.LINEAR);
             svm.setC(1);
             svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, (int) 1E7, 1e-6));
 
@@ -68,13 +68,9 @@ public class Clasificador {
             for (int i = 0; i < imagenes.size(); i++) {
                 //Obtengo la cara
                 c = imagenes.get(i);
-                imwrite(""+i+".png",c.getImagen());
-                //Convierto la imagen a binario
-                threshold(c.getImagen(), c.getImagen(), 100, 255, THRESH_BINARY);
-                
-                
                 //Convierto la imagen al tipo aceptado por el clasificador
                 c.getImagen().convertTo(imagenCara, CV_32FC1);
+                
                 //Asigno imagen como un vector a la matriz que va a contener todas las imagenes
                 entradas.push_back(imagenCara.reshape(0, 1));
                 //Asigno como salida el legajo
