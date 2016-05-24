@@ -129,9 +129,10 @@ public class Guardador {
                     //File midir = new File(".");
                     //File imagen;
                     for (Cara cara : imagenes) {
-                      //  imwrite("imagen.jpg", cara.getImagen());
+                        //imwrite("imagen.jpg", cara.getImagen());
                         //imagen = new File(midir.getCanonicalPath() + "\\imagen.jpg");
-                       InputStream in = this.convertir(cara.getImagen());
+                        InputStream in = this.convertir(cara.getImagen());
+                        //FileInputStream in = new FileInputStream(imagen);
                         if (in !=null) {
                             ps = conexion.prepareStatement("INSERT INTO "
                                     + "carasclasificador(legajo,imagen) "

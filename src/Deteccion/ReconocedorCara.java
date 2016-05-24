@@ -99,8 +99,8 @@ public class ReconocedorCara {
         //Recorro todas las posibles caras detectadas
         Mat cara;
         Cara C;
-        double escalaX =(double) imagen.cols() / this.reducirTamaño;
-        double escalaY =(double) imagen.rows() / this.reducirTamaño;
+        double escalaX = (double) imagen.cols() / this.reducirTamaño;
+        double escalaY = (double) imagen.rows() / this.reducirTamaño;
         double xi;
         double yi;
         double xf;
@@ -109,7 +109,7 @@ public class ReconocedorCara {
         for (Rect rect : vectorCaras.toArray()) {
             //Obtengo una cara clasificada
             cara = new Mat(imagenNormalizada, rect);
-            
+
             //Marco la cara detectada en la imagen original
             xi = escalaX * rect.x;
             yi = escalaY * rect.y;
@@ -125,8 +125,8 @@ public class ReconocedorCara {
                 C.setPuntoComienzo(rect.tl());
                 //Si se detectaron se agregan al ArrayList
                 //Pero antes se estabiliza la imagen
-                C.setImagen(this.getImagenEstabilizada(C.getImagen(),
-                        C.getOjoIzquierdo(), C.getOjoDerecho()));
+//                C.setImagen(this.getImagenEstabilizada(C.getImagen(),
+//                        C.getOjoIzquierdo(), C.getOjoDerecho()));
                 carasValidas.add(C);
             }
         }

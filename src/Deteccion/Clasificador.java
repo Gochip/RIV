@@ -5,6 +5,7 @@ package Deteccion;
 
 import Guardador.Guardador;
 import java.util.ArrayList;
+import static org.opencv.core.CvType.CV_32F;
 import static org.opencv.core.CvType.CV_32FC1;
 import static org.opencv.core.CvType.CV_32S;
 import org.opencv.core.Mat;
@@ -12,6 +13,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
 import static org.opencv.imgcodecs.Imgcodecs.imwrite;
+import static org.opencv.imgproc.Imgproc.Canny;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 import static org.opencv.imgproc.Imgproc.threshold;
 import static org.opencv.ml.Ml.ROW_SAMPLE;
@@ -53,7 +55,7 @@ public class Clasificador {
         if (imagenes.size() > 0) {
             //Configuro el clasificador
             svm.setType(SVM.C_SVC);
-            svm.setKernel(SVM.LINEAR);
+            svm.setKernel(SVM.RBF);
             svm.setC(1);
             svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, (int) 1E7, 1e-6));
 
@@ -68,9 +70,9 @@ public class Clasificador {
             for (int i = 0; i < imagenes.size(); i++) {
                 //Obtengo la cara
                 c = imagenes.get(i);
+                //Canny(c.getImagen(), c.getImagen(), 50, 50 * 2);
                 //Convierto la imagen al tipo aceptado por el clasificador
-                c.getImagen().convertTo(imagenCara, CV_32FC1);
-                
+                c.getImagen().convertTo(imagenCara, CV_32F);
                 //Asigno imagen como un vector a la matriz que va a contener todas las imagenes
                 entradas.push_back(imagenCara.reshape(0, 1));
                 //Asigno como salida el legajo
@@ -96,10 +98,11 @@ public class Clasificador {
     public void getLegajo(ArrayList<Cara> caras) {
         Mat imagenDetectar = new Mat();
         for (Cara cara : caras) {
+            //Canny(cara.getImagen(), cara.getImagen(), 50, 50 * 2);        
             //Convierto la imagen a binario
-            threshold(cara.getImagen(), cara.getImagen(), 100, 255, THRESH_BINARY);
+            //threshold(cara.getImagen(), cara.getImagen(), 100, 255, THRESH_BINARY);
 
-            cara.getImagen().convertTo(imagenDetectar, CV_32FC1);
+            cara.getImagen().convertTo(imagenDetectar, CV_32F);
             cara.setLegajo((int) this.svm.predict(imagenDetectar.reshape(0, 1)));
         }
     }

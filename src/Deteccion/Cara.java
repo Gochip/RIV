@@ -21,6 +21,7 @@ public class Cara {
         this.imagen = imagen;
         this.OjoDerecho = OjoDerecho;
         this.OjoIzquierdo = OjoIzquierdo;
+        this.ajustarTamaño(new Size(100, 100));
     }
 
     public Cara(Mat imagen, int legajo) {
@@ -34,6 +35,7 @@ public class Cara {
 
     public void setImagen(Mat imagen) {
         this.imagen = imagen;
+        this.ajustarTamaño(new Size(100, 100));
     }
 
     public Rect getOjoDerecho() {
